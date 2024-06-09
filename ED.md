@@ -1,0 +1,4 @@
+- Enviroments
+  - Dev - Developers use it, mostly unstable
+  - Preview - Tries to be as similar to production to debug and not publish bad code
+  - Production - Tries to be as clean as possible because users see it

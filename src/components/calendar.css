@@ -1,0 +1,23 @@
+/* calendar.css */
+
+.react-day-picker {
+  --rdp-cell-size: 2.5rem;
+  --rdp-accent-color: #4CAF50; /* Adjust to match your theme */
+  --rdp-background: #f9f9f9;
+  --rdp-foreground: #333;
+  --rdp-border-radius: 0.5rem;
+}
+
+.react-day-picker .rdp-day_today {
+  border: 2px solid var(--rdp-accent-color);
+}
+
+.react-day-picker .rdp-day_selected {
+  background-color: var(--rdp-accent-color);
+  color: #fff;
+}
+
+.react-day-picker .rdp-nav_button:hover {
+  color: var(--rdp-accent-color);
+}
+
