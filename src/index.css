@@ -154,9 +154,54 @@ input, label {
   color-scheme: light;
 }
 
+@media screen and (max-width: 1920px) {
+  .container {
+    padding: 2rem;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  .container {
+    padding: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .container {
+    padding: 1rem;
+    grid-template-columns: 1fr;
+  }
+}
+
 @media screen and (max-width: 768px) {
   :root {
     --_size: 1.3rem;
+  }
+
+  .container {
+    padding: 0.5rem;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 0.25rem;
+    grid-template-columns: 1fr;
+  }
+
+  .btn {
+    padding: 0.4em;
+    font-size: 0.9rem;
+  }
+
+  .todo {
+    font-size: 1rem;
+  }
+
+  .label {
+    font-size: 0.6em;
   }
 }
 
@@ -189,8 +234,8 @@ h1 {
 
 .container {
   width: 100%;
-  max-width: 250rem;
-  margin: 4vmax 1.5rem 6em;
+  max-width: 100%; 
+  margin: 4vmax auto 6em; 
   display: grid;
   gap: clamp(2rem, 3.5vmax, 8rem);
   text-align: center;
