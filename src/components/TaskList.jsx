@@ -1,6 +1,6 @@
 import TaskItem from './TaskItem';
 
-const TaskList = ({ tasks, deleteTask, toggleTask, enterEditMode, setDeadline }) => {
+const TaskList = ({ tasks, deleteTask, toggleTask, updateTask, setDeadline }) => {
   // Reverse the order of tasks array to display newer tasks on top
   const reversedTasks = tasks.slice().reverse();
 
@@ -8,13 +8,13 @@ const TaskList = ({ tasks, deleteTask, toggleTask, enterEditMode, setDeadline })
     <ul>
       {reversedTasks.map(task => (
         <TaskItem
-        key={task.id}
-        task={task}
-        deleteTask={deleteTask}
-        toggleTask={toggleTask}
-        enterEditMode={enterEditMode}
-        setDeadline={setDeadline}
-      />
+          key={task.id}
+          task={task}
+          deleteTask={deleteTask}
+          toggleTask={toggleTask}
+          updateTask={updateTask}
+          setDeadline={setDeadline}
+        />
       ))}
     </ul>
   );

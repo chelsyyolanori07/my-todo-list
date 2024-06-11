@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
 import CustomForm from './components/CustomForm';
-import EditForm from './components/EditForm';
 import TaskList from './components/TaskList';
 import useLocalStorage from './hooks/useLocalStorage';
 
 function App() {
   const [tasks, setTasks] = useLocalStorage('react-todo.tasks', []);
-  const [previousFocusEl, setPreviousFocusEl] = useState(null);
-  const [editedTask, setEditedTask] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [filter, setFilter] = useState('All');
 
   const addTask = (task) => {
@@ -24,7 +20,7 @@ function App() {
       prevState.map(task => {
         if (task.id === id) {
           const updatedTask = { ...task, checked: !task.checked };
-        
+
           if (updatedTask.checked && updatedTask.isExpired) {
             updatedTask.isExpired = false;
             return updatedTask;
@@ -64,18 +60,6 @@ function App() {
         ? { ...currentTask, name: task.name }
         : currentTask
     )));
-    closeEditMode();
-  };
-
-  const closeEditMode = () => {
-    setIsEditing(false);
-    previousFocusEl.focus();
-  };
-
-  const enterEditMode = (task) => {
-    setEditedTask(task);
-    setIsEditing(true);
-    setPreviousFocusEl(document.activeElement);
   };
 
   const filteredTasks = tasks.filter(task => {
@@ -109,19 +93,12 @@ function App() {
         <h1 className="text-4xl font-bold mb-3">My Todo List :)</h1>
       </header>
       <CustomForm addTask={addTask} setFilter={setFilter} />
-      {isEditing && (
-        <EditForm
-          editedTask={editedTask}
-          updateTask={updateTask}
-          closeEditMode={closeEditMode}
-        />
-      )}
       {filteredTasks && (
         <TaskList
           tasks={filteredTasks}
           deleteTask={deleteTask}
           toggleTask={toggleTask}
-          enterEditMode={enterEditMode}
+          updateTask={updateTask}
           setDeadline={setDeadline}
         />
       )}
