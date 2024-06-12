@@ -158,6 +158,11 @@ input, label {
   .container {
     padding: 2rem;
   }
+
+  .dialog-panel {
+    max-width: 30rem; /* Adjust the max-width as needed */
+    max-height: 30rem;
+  }
 }
 
 @media screen and (max-width: 1366px) {
@@ -165,12 +170,22 @@ input, label {
     padding: 1.5rem;
     grid-template-columns: 1fr;
   }
+
+  .dialog-panel {
+    max-width: 25rem; /* Adjust the max-width as needed */
+    max-width: 25rem;
+  }
 }
 
 @media screen and (max-width: 1024px) {
   .container {
     padding: 1rem;
     grid-template-columns: 1fr;
+  }
+
+  .dialog-panel {
+    max-width: 20rem; /* Adjust the max-width as needed */
+    max-height: 20rem;
   }
 }
 
@@ -182,6 +197,11 @@ input, label {
   .container {
     padding: 0.5rem;
     grid-template-columns: 1fr;
+  }
+
+  .dialog-panel {
+    max-width: 15rem; /* Adjust the max-width as needed */
+    max-height: 15rem;
   }
 }
 
@@ -202,6 +222,11 @@ input, label {
 
   .label {
     font-size: 0.6em;
+  }
+
+  .dialog-panel {
+    max-width: 10rem; /* Adjust the max-width as needed */
+    max-height: 10rem;
   }
 }
 
@@ -344,32 +369,11 @@ hr {
   opacity: 0;
 }
 
-[role="dialog"] {
-  position: fixed;
-  z-index: 100;
-  inset: 0;
-  padding-inline: 2vmax;
-  display: grid;
-  place-items: center;
-  background-color: hsl(var(--bg) / 0.7);
-}
-
-[role="dialog"] .todo {
-  max-width: 40ch;
-  padding: 2em 1.3em 1.3em;
-  background-color: hsl(var(--bg));
-  border-radius: var(--_radius);
-  border: 0.1em solid hsl(var(--accent) / 0.3);
-  box-shadow: 0 -1em 3em hsl(var(--muted)), 0 1em 3em hsl(var(--accent) / 0.2);
-}
-
 .text-xxs {
   font-size: 11px; 
   line-height: 0.75rem;
 }
 
 .bg-blue-500 {
-  background-color: #5998a0;
+  background-color: #1293a4;
 }
-
-

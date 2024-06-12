@@ -9,12 +9,14 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTaskName, setEditedTaskName] = useState(task.name);
+  const [selectedDeadline, setSelectedDeadline] = useState(task.deadline);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
     toggleTask(task.id);
     if (!isChecked) {
       setDeadline(task.id, null);
+      setSelectedDeadline(null);
     }
   };
 
@@ -32,6 +34,15 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     if (e.key === 'Enter') {
       handleEditSubmit(e);
     }
+  };
+
+  const formatDate = (date) => {
+    if (!date) return "No deadline set";
+    return new Date(date).toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
   };
 
   return (
@@ -131,9 +142,15 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                   <div className="flex min-h-full items-center justify-center p-4 text-center">
                     <CalendarDemo
                       task={task}
-                      setDeadline={setDeadline}
-                      closeModal={() => setIsOpen(false)}
+                      setDeadline={(id, date) => {
+                        setSelectedDeadline(date); // Update the selected deadline state
+                        setDeadline(id, date);
+                      }}
                     />
+                  </div>
+                  <div className="flex items-center mt-4 p-2 rounded">
+                    <CalendarIcon width={16} height={16} className="mr-2 text-black" />
+                    <span className="text-black">{formatDate(selectedDeadline)}</span>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

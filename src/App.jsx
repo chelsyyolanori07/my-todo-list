@@ -51,6 +51,13 @@ function App() {
           ? { ...task, deadline: deadline.toISOString() } 
           : task
       )));
+    } else {
+      // If deadline is null, clear the deadline for the task
+      setTasks(prevState => prevState.map(task => (
+        task.id === id
+          ? { ...task, deadline: null } 
+          : task
+      )));
     }
   };
 
