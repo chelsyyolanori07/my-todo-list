@@ -7,7 +7,7 @@
   border: 0.2em solid hsl(var(--muted) / 0.8);
   padding: 0.6em;
   border-radius: calc(var(--_radius) * 2);
-  width: 100%; /* Adjusted width */
+  width: 100%; 
   height: auto;
   margin-bottom: 20px;
 }

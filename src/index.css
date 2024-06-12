@@ -107,7 +107,7 @@ input, label {
   --muted--light: var(--_hue) 30% 99%;
 
   /* Dark Mode */
-  --bg--dark: var(--_hue) 45% 28%;
+  --bg--dark: var(--_hue) 35% 28%;
   --txt--dark: var(--_hue) 30% 88%;
   --accent--dark: var(--_hue) 30% 55%;
   --accent1--dark: 10 50% 85%;
@@ -160,7 +160,7 @@ input, label {
   }
 
   .dialog-panel {
-    max-width: 30rem; /* Adjust the max-width as needed */
+    max-width: 30rem; 
     max-height: 30rem;
   }
 }
@@ -172,7 +172,7 @@ input, label {
   }
 
   .dialog-panel {
-    max-width: 25rem; /* Adjust the max-width as needed */
+    max-width: 25rem; 
     max-width: 25rem;
   }
 }
@@ -184,7 +184,7 @@ input, label {
   }
 
   .dialog-panel {
-    max-width: 20rem; /* Adjust the max-width as needed */
+    max-width: 20rem; 
     max-height: 20rem;
   }
 }
@@ -200,7 +200,7 @@ input, label {
   }
 
   .dialog-panel {
-    max-width: 15rem; /* Adjust the max-width as needed */
+    max-width: 15rem; 
     max-height: 15rem;
   }
 }
@@ -225,7 +225,7 @@ input, label {
   }
 
   .dialog-panel {
-    max-width: 10rem; /* Adjust the max-width as needed */
+    max-width: 10rem; 
     max-height: 10rem;
   }
 }
@@ -375,5 +375,5 @@ hr {
 }
 
 .bg-blue-500 {
-  background-color: #1293a4;
+  background-color: #25547B;
 }

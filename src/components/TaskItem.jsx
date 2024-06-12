@@ -38,11 +38,9 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
 
   const formatDate = (date) => {
     if (!date) return "No deadline set";
-    return new Date(date).toLocaleDateString('id-ID', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    });
+    const options = { day: '2-digit', month: 'long', year: 'numeric' };
+    const formattedDate = new Date(date).toLocaleDateString('en-GB', options);
+    return formattedDate;
   };
 
   return (
@@ -125,7 +123,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-slate-50 p-6 text-left align-middle shadow-xl transition-all">
                   <button
                     type="button"
                     className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -143,7 +141,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     <CalendarDemo
                       task={task}
                       setDeadline={(id, date) => {
-                        setSelectedDeadline(date); // Update the selected deadline state
+                        setSelectedDeadline(date); 
                         setDeadline(id, date);
                       }}
                     />

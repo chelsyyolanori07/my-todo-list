@@ -11,26 +11,6 @@ export function CalendarDemo({ task, setDeadline, closeModal }) {
     setDeadline(task.id, date);
     closeModal();
   };
-
-  const customDayClassNames = (date) => {
-    const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
-    const customClasses = [];
-
-    if (isSelected) {
-      customClasses.push("text-white"); 
-    } else {
-      customClasses.push("text-black"); 
-    }
-
-    if (task?.deadline) {
-      const deadlineDate = new Date(task.deadline);
-      if (date < new Date() && date > deadlineDate) {
-        customClasses.push("bg-blue-500 text-white"); 
-      }
-    }
-
-    return customClasses.join(" ");
-  };
   
   return (
     <Calendar
@@ -38,7 +18,6 @@ export function CalendarDemo({ task, setDeadline, closeModal }) {
       className="rounded-md border"
       selected={selectedDate}
       onSelect={handleDateChange}
-      dayClassName={customDayClassNames}
     />
   );
 }
