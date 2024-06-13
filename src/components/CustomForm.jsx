@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 const CustomForm = ({ addTask, setFilter }) => {
   const [task, setTask] = useState("");
   const [showFilters, setShowFilters] = useState(false);
-  const filters = ['All', 'Todo', 'Done', 'Exp'];
+  const filters = ['All', 'Todo', 'Done', 'Exp', 'Prio'];
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
 
@@ -13,7 +13,8 @@ const CustomForm = ({ addTask, setFilter }) => {
     addTask({
       name: task,
       checked: false,
-      id: Date.now()
+      id: Date.now(),
+      priority: null 
     });
     setTask("");
   };

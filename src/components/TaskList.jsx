@@ -1,12 +1,9 @@
 import TaskItem from './TaskItem';
 
 const TaskList = ({ tasks, deleteTask, toggleTask, updateTask, setDeadline }) => {
-  // Reverse the order of tasks array to display newer tasks on top
-  const reversedTasks = tasks.slice().reverse();
-
   return (
     <ul>
-      {reversedTasks.map(task => (
+      {tasks.map(task => (
         <TaskItem
           key={task.id}
           task={task}

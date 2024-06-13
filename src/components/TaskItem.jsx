@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { CalendarIcon, CheckIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { CalendarIcon, CheckIcon, TrashIcon, XMarkIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import { Fragment, useState } from 'react';
 import styles from './TaskItem.module.css';
 import { CalendarDemo } from "./demo/CalendarDemo";
@@ -7,9 +7,11 @@ import { CalendarDemo } from "./demo/CalendarDemo";
 const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => {
   const [isChecked, setIsChecked] = useState(task.checked);
   const [isOpen, setIsOpen] = useState(false);
+  const [isPriorityOpen, setIsPriorityOpen] = useState(false); 
   const [isEditing, setIsEditing] = useState(false);
   const [editedTaskName, setEditedTaskName] = useState(task.name);
   const [selectedDeadline, setSelectedDeadline] = useState(task.deadline);
+  const [priority, setPriority] = useState(task.priority || null); 
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -41,6 +43,13 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     const options = { day: '2-digit', month: 'long', year: 'numeric' };
     const formattedDate = new Date(date).toLocaleDateString('en-GB', options);
     return formattedDate;
+  };
+
+  const handlePriorityChange = (newPriority) => {
+    const updatedPriority = priority === newPriority ? null : newPriority; 
+    setPriority(updatedPriority);
+    updateTask({ ...task, priority: updatedPriority });
+    setIsPriorityOpen(false);
   };
 
   return (
@@ -84,6 +93,13 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
       <div className={styles["task-group"]}>
         <button
           className="btn"
+          aria-label={`Set priority for ${task.name} Task`}
+          onClick={() => setIsPriorityOpen(true)}
+        >
+          <AdjustmentsHorizontalIcon width={12} height={12} />
+        </button>
+        <button
+          className="btn"
           aria-label={`Set deadline for ${task.name} Task`}
           onClick={() => setIsOpen(true)}
         >
@@ -97,6 +113,63 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
           <TrashIcon width={12} height={12} />
         </button>
       </div>
+
+      <Transition appear show={isPriorityOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={() => setIsPriorityOpen(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-slate-50 p-6 text-left align-middle shadow-xl transition-all">
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                    onClick={() => setIsPriorityOpen(false)}
+                  >
+                    <XMarkIcon width={24} height={24} />
+                  </button>
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-black"
+                  >
+                    Select Priority
+                  </Dialog.Title>
+                  <div className="flex flex-col mt-4">
+                    {[1, 2, 3, 4].map((p) => (
+                      <button
+                        key={p}
+                        className={`p-2 mb-2 rounded ${priority === p ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black'}`}
+                        onClick={() => handlePriorityChange(p)}
+                      >
+                        Priority {p}
+                      </button>
+                    ))}
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => setIsOpen(false)}>

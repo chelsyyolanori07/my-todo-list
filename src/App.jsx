@@ -48,14 +48,13 @@ function App() {
     if (deadline) {
       setTasks(prevState => prevState.map(task => (
         task.id === id
-          ? { ...task, deadline: deadline.toISOString() } 
+          ? { ...task, deadline: deadline.toISOString() }
           : task
       )));
     } else {
-      // If deadline is null, clear the deadline for the task
       setTasks(prevState => prevState.map(task => (
         task.id === id
-          ? { ...task, deadline: null } 
+          ? { ...task, deadline: null }
           : task
       )));
     }
@@ -64,7 +63,7 @@ function App() {
   const updateTask = (task) => {
     setTasks(prevState => prevState.map(currentTask => (
       currentTask.id === task.id
-        ? { ...currentTask, name: task.name }
+        ? { ...currentTask, ...task }
         : currentTask
     )));
   };
@@ -74,6 +73,15 @@ function App() {
     if (filter === 'Todo') return !task.checked;
     if (filter === 'Done') return task.checked;
     if (filter === 'Exp') return task.isExpired;
+    if (filter === 'Prio') return task.priority !== undefined && task.priority !== null;
+    return true;
+  }).sort((a, b) => {
+    if (filter === 'Prio') {
+      if (a.priority === undefined || a.priority === null) return 1;
+      if (b.priority === undefined || b.priority === null) return -1;
+      return a.priority - b.priority;
+    }
+    return b.id - a.id; 
   });
 
   useEffect(() => {
