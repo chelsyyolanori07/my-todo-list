@@ -1,5 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { CalendarIcon, CheckIcon, ListBulletIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ClockIcon } from "lucide-react";
 import { Fragment, useState } from 'react';
 import styles from './TaskItem.module.css';
 import TimerBar from './TimerBar';
@@ -188,20 +189,21 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                   </div>
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-black"
+                    className="text-lg font-medium leading-6 text-black mt-4"
                   >
-                    Set Your Timer
+                    Set Your Timer (In Minutes)
                   </Dialog.Title>
-                  <div className={styles.timer}>
+                  <div className="flex items-center mt-4 space-x-2 text-base">
+                    <ClockIcon width={24} height={24} className="mr-0 text-black" />
                     <input
                       type="number"
                       min="0"
                       value={timer}
                       onChange={handleTimerChange}
-                      placeholder="Set in (min)"
-                      className={styles.timerInput}
+                      placeholder="min"
+                      className="w-20 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
-                    <button className="btn" onClick={startTimer}>
+                    <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition" onClick={startTimer}>
                       Start Timer
                     </button>
                   </div>
