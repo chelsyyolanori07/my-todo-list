@@ -1,17 +1,20 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { CalendarIcon, CheckIcon, TrashIcon, XMarkIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
+import { CalendarIcon, CheckIcon, ListBulletIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment, useState } from 'react';
 import styles from './TaskItem.module.css';
+import TimerBar from './TimerBar';
 import { CalendarDemo } from "./demo/CalendarDemo";
 
 const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => {
   const [isChecked, setIsChecked] = useState(task.checked);
   const [isOpen, setIsOpen] = useState(false);
-  const [isPriorityOpen, setIsPriorityOpen] = useState(false); 
+  const [isPriorityOpen, setIsPriorityOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTaskName, setEditedTaskName] = useState(task.name);
   const [selectedDeadline, setSelectedDeadline] = useState(task.deadline);
-  const [priority, setPriority] = useState(task.priority || null); 
+  const [priority, setPriority] = useState(task.priority || null);
+  const [timer, setTimer] = useState(task.timer || 0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -46,14 +49,25 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   };
 
   const handlePriorityChange = (newPriority) => {
-    const updatedPriority = priority === newPriority ? null : newPriority; 
+    const updatedPriority = priority === newPriority ? null : newPriority;
     setPriority(updatedPriority);
     updateTask({ ...task, priority: updatedPriority });
     setIsPriorityOpen(false);
   };
 
+  const handleTimerChange = (e) => {
+    setTimer(e.target.value);
+  };
+
+  const startTimer = () => {
+    setIsTimerRunning(true);
+  };
+
+  const isTaskExpired = task.isExpired;
+
   return (
-    <li className={`${styles.task} relative ${task.isExpired ? 'bg-blue-500' : ''}`}>
+    <li className={`${styles.task} relative ${isTaskExpired ? 'bg-blue-500' : ''}`}>
+     <div className={styles["task-container"]}>
       <div className={styles["task-group"]}>
         <input
           type="checkbox"
@@ -90,13 +104,13 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
           </label>
         )}
       </div>
-      <div className={styles["task-group"]}>
+      <div className={styles["button-group"]}>
         <button
           className="btn"
           aria-label={`Set priority for ${task.name} Task`}
           onClick={() => setIsPriorityOpen(true)}
         >
-          <AdjustmentsHorizontalIcon width={12} height={12} />
+          <ListBulletIcon width={12} height={12} />
         </button>
         <button
           className="btn"
@@ -112,6 +126,14 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
         >
           <TrashIcon width={12} height={12} />
         </button>
+      </div>
+    </div>
+      <div className={styles.timerContainer}>
+        <TimerBar
+          initialTime={timer * 60}
+          isTimerRunning={isTimerRunning}
+          setIsTimerRunning={setIsTimerRunning}
+        />
       </div>
 
       <Transition appear show={isPriorityOpen} as={Fragment}>
@@ -163,6 +185,25 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                         Priority {p}
                       </button>
                     ))}
+                  </div>
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-black"
+                  >
+                    Set Your Timer
+                  </Dialog.Title>
+                  <div className={styles.timer}>
+                    <input
+                      type="number"
+                      min="0"
+                      value={timer}
+                      onChange={handleTimerChange}
+                      placeholder="Set in (min)"
+                      className={styles.timerInput}
+                    />
+                    <button className="btn" onClick={startTimer}>
+                      Start Timer
+                    </button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

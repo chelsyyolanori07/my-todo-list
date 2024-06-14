@@ -19,25 +19,7 @@ function App() {
     setTasks(prevState =>
       prevState.map(task => {
         if (task.id === id) {
-          const updatedTask = { ...task, checked: !task.checked };
-
-          if (updatedTask.checked && updatedTask.isExpired) {
-            updatedTask.isExpired = false;
-            return updatedTask;
-          }
-
-          if (updatedTask.checked) {
-            updatedTask.isExpired = false;
-            return updatedTask;
-          }
-
-          const deadline = new Date(updatedTask.deadline);
-          if (deadline < new Date()) {
-            updatedTask.isExpired = true;
-          } else {
-            updatedTask.isExpired = false;
-          }
-          return updatedTask;
+          return { ...task, checked: !task.checked };
         }
         return task;
       })
@@ -60,12 +42,14 @@ function App() {
     }
   };
 
-  const updateTask = (task) => {
-    setTasks(prevState => prevState.map(currentTask => (
-      currentTask.id === task.id
-        ? { ...currentTask, ...task }
-        : currentTask
-    )));
+  const updateTask = (updatedTask) => {
+    setTasks(prevState =>
+      prevState.map(task =>
+        task.id === updatedTask.id
+          ? { ...task, ...updatedTask }
+          : task
+      )
+    );
   };
 
   const filteredTasks = tasks.filter(task => {

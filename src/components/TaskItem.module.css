@@ -1,5 +1,6 @@
 .task {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   gap: 0.6em;
@@ -7,16 +8,28 @@
   border: 0.2em solid hsl(var(--muted) / 0.8);
   padding: 0.6em;
   border-radius: calc(var(--_radius) * 2);
-  width: 100%; 
+  width: 100%;
   height: auto;
   margin-bottom: 20px;
+}
+
+.task-container {
+  display: flex;
+  justify-content: space-between; /* Align task group and button group on the same line */
+  width: 100%;
 }
 
 .task-group {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   --taskgroup-gap: .5em;
   gap: var(--taskgroup-gap);
+}
+
+.button-group {
+  display: flex;
+  gap: 10px; /* Adjust spacing between buttons */
 }
 
 .label {
@@ -24,6 +37,7 @@
   cursor: pointer;
   text-align: left;
   line-height: 1.4;
+  flex-grow: 1;
 }
 
 .checkbox {
@@ -110,3 +124,43 @@
   text-align: center;
 }
 
+.timer {
+  margin-top: 10px; 
+}
+
+.timerInput {
+  width: 100px;
+}
+
+.timerContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 3px; 
+  width: 100%;
+}
+
+.timerIcon {
+  margin-right: 10px;
+}
+
+.timerBar {
+  flex-grow: 1;
+  height: 0.75rem;
+  background-color: lightgray;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  width: 100%; 
+}
+
+.timerFill {
+  height: 100%;
+  background-color: rgb(56, 181, 206);
+  transition: width 0.5s linear;
+  width: 0%; 
+}
+
+.timerDisplay {
+  margin-left: 10px;
+  font-size: 1rem;
+}

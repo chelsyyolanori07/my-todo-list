@@ -1,0 +1,31 @@
+.timerContainer {
+  display: flex;
+  align-items: center;
+}
+
+.timerIcon {
+  margin-right: 3px;
+}
+
+.timerBar {
+  flex-grow: 1;
+  height: 0.5rem;
+  background-color: lightgray;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  width: 500px;
+}
+
+.timerFill {
+  height: 100%;
+  background-color: rgb(56, 181, 206);
+  transition: width 0.5s linear;
+  width: 0%; 
+}
+  
+.timerDisplay {
+  margin-left: 2px;
+  margin-right: 10px;
+  font-size: 1rem;
+}
