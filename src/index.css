@@ -281,7 +281,7 @@ hr {
   background-color: hsl(var(--accent));
   color: hsl(var(--bg));
   text-decoration: none;
-  padding: 0.5em;
+  padding: 0.25em;
   border-radius: var(--_radius);
   box-shadow: 0.05em 0.1em 0.9em hsl(var(--accent) / 0.3),
     0 0 0 -0.1em hsl(var(--bg)), 0 0 0 -0.2em hsl(var(--accent));

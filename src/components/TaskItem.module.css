@@ -32,6 +32,7 @@
 .button-group {
   display: none;
   gap: 10px;
+  margin-left: 150px;
 }
 
 .task:hover .button-group {
@@ -144,7 +145,7 @@
 .timer-info {
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 200px;
 }
 
 .timer {
