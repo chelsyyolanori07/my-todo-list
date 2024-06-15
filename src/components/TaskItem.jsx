@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { CalendarIcon, CheckIcon, ListBulletIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { CalendarIcon, CheckIcon, ListBulletIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { ClockIcon } from "lucide-react";
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import styles from './TaskItem.module.css';
 import TimerBar from './TimerBar';
 import { CalendarDemo } from "./demo/CalendarDemo";
@@ -14,7 +14,8 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const [editedTaskName, setEditedTaskName] = useState(task.name);
   const [selectedDeadline, setSelectedDeadline] = useState(task.deadline);
   const [priority, setPriority] = useState(task.priority || null);
-  const [timer, setTimer] = useState(task.timer || 0);
+  const [initialTime, setInitialTime] = useState(task.timer || 0);
+  const [remainingTime, setRemainingTime] = useState(task.timer || 0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const handleCheckboxChange = () => {
@@ -57,7 +58,9 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   };
 
   const handleTimerChange = (e) => {
-    setTimer(e.target.value);
+    const newTime = e.target.value;
+    setInitialTime(newTime);
+    setRemainingTime(newTime);
   };
 
   const startTimer = () => {
@@ -66,72 +69,90 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
 
   const isTaskExpired = task.isExpired;
 
+  useEffect(() => {
+    setRemainingTime(initialTime * 60);
+  }, [initialTime]);
+
+  useEffect(() => {
+    if (!isTimerRunning) {
+      setRemainingTime(initialTime * 60);
+    }
+  }, [isTimerRunning, initialTime]);
+
   return (
     <li className={`${styles.task} relative ${isTaskExpired ? 'bg-blue-500' : ''}`}>
-     <div className={styles["task-container"]}>
-      <div className={styles["task-group"]}>
-        <input
-          type="checkbox"
-          className={styles.checkbox}
-          checked={isChecked}
-          onChange={handleCheckboxChange}
-          name={task.name}
-          id={task.id}
-        />
-        {isEditing ? (
-          <form onSubmit={handleEditSubmit} className={styles["edit-form"]}>
-            <input
-              type="text"
-              className={styles.input}
-              value={editedTaskName}
-              onChange={handleEditChange}
-              onKeyDown={handleKeyDown}
-              autoFocus
-              required
-            />
-          </form>
-        ) : (
-          <label
-            htmlFor={task.id}
-            className={styles.label}
-            onDoubleClick={() => setIsEditing(true)}
+      <div className={styles["task-container"]}>
+        <div className={styles["task-group"]}>
+          <input
+            type="checkbox"
+            className={styles.checkbox}
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+            name={task.name}
+            id={task.id}
+          />
+          {isEditing ? (
+            <form onSubmit={handleEditSubmit} className={styles["edit-form"]}>
+              <input
+                type="text"
+                className={styles.input}
+                value={editedTaskName}
+                onChange={handleEditChange}
+                onKeyDown={handleKeyDown}
+                autoFocus
+                required
+              />
+            </form>
+          ) : (
+            <label
+              htmlFor={task.id}
+              className={styles.label}
+              onDoubleClick={() => setIsEditing(true)}
+            >
+              <div className="flex items-center">
+                <span className="text-lg">{task.name}</span>
+              </div>
+              <p className={styles.checkmark}>
+                <CheckIcon strokeWidth={2} width={12} height={12} />
+              </p>
+            </label>
+          )}
+        <div className={styles["timer-info"]}>
+          <ClockIcon width={20} height={20} className={styles.timerIcon} />
+        <div className={styles.timerDisplay}>
+          {Math.floor(remainingTime / 60)}:{remainingTime % 60 < 10 ? '0' : ''}{remainingTime % 60}
+        </div>
+      </div>
+        </div>
+        <div className={styles["button-group"]}>
+          <button
+            className="btn"
+            aria-label={`Set priority for ${task.name} Task`}
+            onClick={() => setIsPriorityOpen(true)}
           >
-            <div className="flex items-center">
-              <span className="text-lg">{task.name}</span>
-            </div>
-            <p className={styles.checkmark}>
-              <CheckIcon strokeWidth={2} width={12} height={12} />
-            </p>
-          </label>
-        )}
+            <ListBulletIcon width={12} height={12} />
+          </button>
+          <button
+            className="btn"
+            aria-label={`Set deadline for ${task.name} Task`}
+            onClick={() => setIsOpen(true)}
+          >
+            <CalendarIcon width={12} height={12} />
+          </button>
+          <button
+            className={`btn ${styles.delete}`}
+            aria-label={`Delete ${task.name} Task`}
+            onClick={() => deleteTask(task.id)}
+          >
+            <TrashIcon width={12} height={12} />
+          </button>
+        </div>
       </div>
-      <div className={styles["button-group"]}>
-        <button
-          className="btn"
-          aria-label={`Set priority for ${task.name} Task`}
-          onClick={() => setIsPriorityOpen(true)}
-        >
-          <ListBulletIcon width={12} height={12} />
-        </button>
-        <button
-          className="btn"
-          aria-label={`Set deadline for ${task.name} Task`}
-          onClick={() => setIsOpen(true)}
-        >
-          <CalendarIcon width={12} height={12} />
-        </button>
-        <button
-          className={`btn ${styles.delete}`}
-          aria-label={`Delete ${task.name} Task`}
-          onClick={() => deleteTask(task.id)}
-        >
-          <TrashIcon width={12} height={12} />
-        </button>
-      </div>
-    </div>
       <div className={styles.timerContainer}>
         <TimerBar
-          initialTime={timer * 60}
+          initialTime={initialTime * 60}
+          remainingTime={remainingTime}
+          setRemainingTime={setRemainingTime}
           isTimerRunning={isTimerRunning}
           setIsTimerRunning={setIsTimerRunning}
         />
@@ -198,7 +219,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     <input
                       type="number"
                       min="0"
-                      value={timer}
+                      value={initialTime}
                       onChange={handleTimerChange}
                       placeholder="min"
                       className="w-20 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
