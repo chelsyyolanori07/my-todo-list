@@ -89,7 +89,7 @@ function App() {
   return (
     <div className="container mx-auto p-4">
       <header>
-        <h1 className="text-4xl font-bold mb-3">My Todo List :)</h1>
+        <h1 className="text-5xl font-bold mb-3">My Todo List :)</h1>
       </header>
       <CustomForm addTask={addTask} setFilter={setFilter} />
       {filteredTasks && (
