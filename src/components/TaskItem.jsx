@@ -79,6 +79,13 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     }
   }, [isTimerRunning, initialTime]);
 
+  const formatTime = (totalSeconds) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
   return (
     <li className={`${styles.task} relative ${isTaskExpired ? 'bg-blue-500' : ''}`}>
       <div className={styles["task-container"]}>
@@ -117,12 +124,12 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
               </p>
             </label>
           )}
-        <div className={styles["timer-info"]}>
-          <ClockIcon width={20} height={20} className={styles.timerIcon} />
-        <div className={styles.timerDisplay}>
-          {Math.floor(remainingTime / 60)}:{remainingTime % 60 < 10 ? '0' : ''}{remainingTime % 60}
-        </div>
-      </div>
+          <div className={styles["timer-info"]}>
+            <ClockIcon width={20} height={20} className={styles.timerIcon} />
+            <div className={styles.timerDisplay}>
+              {formatTime(remainingTime)}
+            </div>
+          </div>
         </div>
         <div className={styles["button-group"]}>
           <button
