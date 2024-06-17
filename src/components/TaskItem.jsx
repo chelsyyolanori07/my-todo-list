@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { CalendarIcon, CheckIcon, ListBulletIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import { ClockIcon } from "lucide-react";
+import { CalendarIcon, CheckIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { ClockIcon, EllipsisVertical } from "lucide-react";
 import { Fragment, useState, useEffect } from 'react';
 import styles from './TaskItem.module.css';
 import TimerBar from './TimerBar';
@@ -137,7 +137,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
             aria-label={`Set priority for ${task.name} Task`}
             onClick={() => setIsPriorityOpen(true)}
           >
-            <ListBulletIcon width={12} height={12} />
+            <EllipsisVertical width={12} height={12} />
           </button>
           <button
             className="btn"
