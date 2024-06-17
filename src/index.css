@@ -207,7 +207,7 @@ input, label {
 
 @media screen and (max-width: 480px) {
   .container {
-    padding: 0.25rem;
+    padding: 5rem;
     grid-template-columns: 1fr;
   }
 
@@ -226,6 +226,31 @@ input, label {
 
   .dialog-panel {
     max-width: 10rem; 
+    max-height: 10rem;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .container {
+    padding: 5rem;
+    grid-template-columns: 1fr;
+  }
+
+  .btn {
+    padding: 0.4em;
+    font-size: 0.9rem;
+  }
+
+  .todo {
+    font-size: 1rem;
+  }
+
+  .label {
+    font-size: 0.6em;
+  }
+
+  .dialog-panel {
+    max-width: 10rem;
     max-height: 10rem;
   }
 }
