@@ -204,14 +204,14 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                   >
                     Select Priority
                   </Dialog.Title>
-                  <div className="flex flex-col mt-4">
+                  <div className="flex flex-row mt-4 space-x-3">
                     {[1, 2, 3, 4].map((p) => (
                       <button
                         key={p}
-                        className={`p-2 mb-2 rounded ${priority === p ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black'}`}
+                        className={`px-4 py-2 mb-2 rounded ${priority === p ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black'}`}
                         onClick={() => handlePriorityChange(p)}
                       >
-                        Priority {p}
+                        {p}
                       </button>
                     ))}
                   </div>
