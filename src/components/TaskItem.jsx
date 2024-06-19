@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { CalendarIcon, CheckIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { ClockIcon, EllipsisVertical } from "lucide-react";
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import styles from './TaskItem.module.css';
 import TimerBar from './TimerBar';
 import { CalendarDemo } from "./demo/CalendarDemo";
@@ -17,6 +17,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const [initialTime, setInitialTime] = useState(task.timer || 0);
   const [remainingTime, setRemainingTime] = useState(task.timer || 0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [timeInput, setTimeInput] = useState('00:00:00'); 
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -58,9 +59,15 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   };
 
   const handleTimerChange = (e) => {
-    const newTime = e.target.value;
-    setInitialTime(newTime);
-    setRemainingTime(newTime);
+    const timeParts = e.target.value.split(':');
+    const hours = parseInt(timeParts[0], 10) || 0;
+    const minutes = parseInt(timeParts[1], 10) || 0;
+    const seconds = parseInt(timeParts[2], 10) || 0;
+    const newTimeInSeconds = (hours * 3600) + (minutes * 60) + seconds;
+
+    setInitialTime(newTimeInSeconds);
+    setRemainingTime(newTimeInSeconds);
+    setTimeInput(e.target.value); 
   };
 
   const startTimer = () => {
@@ -70,12 +77,12 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const isTaskExpired = task.isExpired;
 
   useEffect(() => {
-    setRemainingTime(initialTime * 60);
+    setRemainingTime(initialTime);
   }, [initialTime]);
 
   useEffect(() => {
     if (!isTimerRunning) {
-      setRemainingTime(initialTime * 60);
+      setRemainingTime(initialTime);
     }
   }, [isTimerRunning, initialTime]);
 
@@ -157,7 +164,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
       </div>
       <div className={styles.timerContainer}>
         <TimerBar
-          initialTime={initialTime * 60}
+          initialTime={initialTime}
           remainingTime={remainingTime}
           setRemainingTime={setRemainingTime}
           isTimerRunning={isTimerRunning}
@@ -219,17 +226,16 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     as="h3"
                     className="text-lg font-medium leading-6 text-black mt-4"
                   >
-                    Set Your Timer (In Minutes)
+                    Set Your Timer
                   </Dialog.Title>
                   <div className="flex items-center mt-4 space-x-2 text-base">
-                    <ClockIcon width={24} height={24} className="mr-0 text-black" />
+                   <ClockIcon width={25} height={25} className="mr-0 text-black" />
                     <input
-                      type="number"
-                      min="0"
-                      value={initialTime}
+                      type="time"
+                      step="1"
+                      value={timeInput}
                       onChange={handleTimerChange}
-                      placeholder="min"
-                      className="w-20 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                     <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition" onClick={startTimer}>
                       Start Timer
