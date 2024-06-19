@@ -5,6 +5,7 @@ import { Fragment, useEffect, useState } from 'react';
 import styles from './TaskItem.module.css';
 import TimerBar from './TimerBar';
 import { CalendarDemo } from "./demo/CalendarDemo";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => {
   const [isChecked, setIsChecked] = useState(task.checked);
@@ -14,10 +15,11 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const [editedTaskName, setEditedTaskName] = useState(task.name);
   const [selectedDeadline, setSelectedDeadline] = useState(task.deadline);
   const [priority, setPriority] = useState(task.priority || null);
-  const [initialTime, setInitialTime] = useState(task.timer || 0);
-  const [remainingTime, setRemainingTime] = useState(task.timer || 0);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [timeInput, setTimeInput] = useState('00:00:00'); 
+  const [initialTime, setInitialTime] = useLocalStorage(`timer-${task.id}-initial`, task.timer || 0);
+  const [remainingTime, setRemainingTime] = useLocalStorage(`timer-${task.id}-remaining`, initialTime);
+  const [isTimerRunning, setIsTimerRunning] = useLocalStorage(`timer-${task.id}-running`, false);
+  const [timeInput, setTimeInput] = useState('00:00:00');
+  const [timerExpired, setTimerExpired] = useState(false);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -67,7 +69,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
 
     setInitialTime(newTimeInSeconds);
     setRemainingTime(newTimeInSeconds);
-    setTimeInput(e.target.value); 
+    setTimeInput(e.target.value);
   };
 
   const startTimer = () => {
@@ -77,15 +79,30 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const isTaskExpired = task.isExpired;
 
   useEffect(() => {
-    setRemainingTime(initialTime);
-  }, [initialTime]);
+    if (remainingTime === 0 && isTimerRunning) {
+      setIsTimerRunning(false);
+      setRemainingTime(0);
+      setTimerExpired(true);
+      localStorage.removeItem(`timer-${task.id}-remaining`);
+    }
+  }, [remainingTime, isTimerRunning, task.id]);
 
   useEffect(() => {
-    if (!isTimerRunning) {
-      setRemainingTime(initialTime);
+    if (timerExpired) {
+      setInitialTime(task.timer || 0);
+      setRemainingTime(task.timer || 0);
+      setIsTimerRunning(false);
+      setTimerExpired(false);
+      localStorage.removeItem(`timer-${task.id}-remaining`);
     }
-  }, [isTimerRunning, initialTime]);
+  }, [timerExpired, task.timer, task.id, setInitialTime, setRemainingTime, setIsTimerRunning]);
 
+  useEffect(() => {
+    localStorage.setItem(`timer-${task.id}-initial`, initialTime);
+    localStorage.setItem(`timer-${task.id}-remaining`, remainingTime);
+    localStorage.setItem(`timer-${task.id}-running`, isTimerRunning);
+  }, [initialTime, remainingTime, isTimerRunning, task.id]);
+  
   const formatTime = (totalSeconds) => {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -164,6 +181,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
       </div>
       <div className={styles.timerContainer}>
         <TimerBar
+          taskId={task.id}
           initialTime={initialTime}
           remainingTime={remainingTime}
           setRemainingTime={setRemainingTime}
