@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { CalendarIcon, CheckIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import { ClockIcon, EllipsisVertical } from "lucide-react";
+import { ClockIcon, EllipsisVertical, TagIcon } from "lucide-react";
 import { Fragment, useEffect, useState } from 'react';
 import styles from './TaskItem.module.css';
 import TimerBar from './TimerBar';
@@ -36,7 +36,8 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    updateTask({ ...task, name: editedTaskName });
+    const tags = editedTaskName.match(/#[\w]+/g) || [];
+    updateTask({ ...task, name: editedTaskName, tags });
     setIsEditing(false);
   };
 
@@ -141,11 +142,11 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
               onDoubleClick={() => setIsEditing(true)}
             >
               <div className="flex items-center">
+                <p className={styles.checkmark}>
+                  <CheckIcon strokeWidth={2} width={12} height={12} />
+                </p>
                 <span className="text-lg">{task.name}</span>
               </div>
-              <p className={styles.checkmark}>
-                <CheckIcon strokeWidth={2} width={12} height={12} />
-              </p>
             </label>
           )}
           <div className={styles["timer-info"]}>
@@ -178,6 +179,20 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
             <TrashIcon width={12} height={12} />
           </button>
         </div>
+      </div>
+      <div className={styles["tag-group"]}>
+      {task.tags && task.tags.length > 0 && (
+        <div className="flex">
+          <TagIcon width={20} height={20} className="mr-1 text-white" />
+            <div className="flex">
+              {task.tags && task.tags.map(tag => (
+                <span key={tag} className="text-white text-sm rounded mr-0 ">
+                  {tag.replace('#','')}
+                </span>
+              ))}
+            </div>
+        </div>
+      )}
       </div>
       <div className={styles.timerContainer}>
         <TimerBar
@@ -247,7 +262,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     Set Your Timer
                   </Dialog.Title>
                   <div className="flex items-center mt-4 space-x-2 text-base">
-                   <ClockIcon width={25} height={25} className="mr-0 text-black" />
+                   <ClockIcon width={25} height={25} className="mr-0 text-[#316493]" />
                     <input
                       type="time"
                       step="1"
