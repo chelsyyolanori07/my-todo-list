@@ -182,15 +182,13 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
       </div>
       <div className={styles["tag-group"]}>
       {task.tags && task.tags.length > 0 && (
-        <div className="flex">
+        <div className="flex items-center">
           <TagIcon width={20} height={20} className="mr-1 text-white" />
-            <div className="flex">
-              {task.tags && task.tags.map(tag => (
-                <span key={tag} className="text-white text-sm rounded mr-0 ">
-                  {tag.replace('#','')}
-                </span>
-              ))}
-            </div>
+          {task.tags.map((tag, index) => (
+              <span key={index} className="text-white text-sm rounded mr-2 bg-[#5d87ae] px-2 py-1">
+                {tag.replace('#', '',)}
+              </span>
+            ))}
         </div>
       )}
       </div>
