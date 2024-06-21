@@ -1,11 +1,11 @@
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { Dialog, Transition } from '@headlessui/react';
-import { CalendarIcon, CheckIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import { ClockIcon, EllipsisVertical, TagIcon } from "lucide-react";
+import { CalendarIcon, CheckIcon, TrashIcon, XMarkIcon, TagIcon } from '@heroicons/react/24/solid';
+import { ClockIcon, EllipsisVertical, SquarePlusIcon } from "lucide-react";
 import { Fragment, useEffect, useState } from 'react';
 import styles from './TaskItem.module.css';
 import TimerBar from './TimerBar';
 import { CalendarDemo } from "./demo/CalendarDemo";
-import useLocalStorage from "@/hooks/useLocalStorage";
 
 const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => {
   const [isChecked, setIsChecked] = useState(task.checked);
@@ -20,6 +20,9 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const [isTimerRunning, setIsTimerRunning] = useLocalStorage(`timer-${task.id}-running`, false);
   const [timeInput, setTimeInput] = useState('00:00:00');
   const [timerExpired, setTimerExpired] = useState(false);
+
+  const [availableTags, setAvailableTags] = useState(["work", "personal", "study"]); // Example initial tags
+  const [newTag, setNewTag] = useState("");
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -77,6 +80,24 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     setIsTimerRunning(true);
   };
 
+  const handleTagClick = (tag) => {
+    const updatedTags = task.tags.includes(tag)
+      ? task.tags.filter(t => t !== tag)
+      : [...task.tags, tag];
+    updateTask({ ...task, tags: updatedTags });
+  };
+
+  const handleTagChange = (e) => {
+    setNewTag(e.target.value);
+  };
+
+  const handleAddTag = () => {
+    if (newTag.trim() !== "" && !availableTags.includes(newTag.trim())) {
+      setAvailableTags([...availableTags, newTag.trim()]);
+      setNewTag("");
+    }
+  };
+
   const isTaskExpired = task.isExpired;
 
   useEffect(() => {
@@ -103,7 +124,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     localStorage.setItem(`timer-${task.id}-remaining`, remainingTime);
     localStorage.setItem(`timer-${task.id}-running`, isTimerRunning);
   }, [initialTime, remainingTime, isTimerRunning, task.id]);
-  
+
   const formatTime = (totalSeconds) => {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -181,16 +202,16 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
         </div>
       </div>
       <div className={styles["tag-group"]}>
-      {task.tags && task.tags.length > 0 && (
-        <div className="flex items-center">
-          <TagIcon width={20} height={20} className="mr-1 text-white" />
-          {task.tags.map((tag, index) => (
+        {task.tags && task.tags.length > 0 && (
+          <div className="flex items-center">
+            <TagIcon width={20} height={20} className="mr-1 text-white" />
+            {task.tags.map((tag, index) => (
               <span key={index} className="text-white text-xs rounded mr-2 mt-1 bg-[#5d87ae] px-2 py-1">
                 {tag.replace('#', '',)}
               </span>
             ))}
-        </div>
-      )}
+          </div>
+        )}
       </div>
       <div className={styles.timerContainer}>
         <TimerBar
@@ -260,7 +281,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     Set Your Timer
                   </Dialog.Title>
                   <div className="flex items-center mt-4 space-x-2 text-base">
-                   <ClockIcon width={25} height={25} className="mr-0 text-[#316493]" />
+                    <ClockIcon width={25} height={25} className="mr-0 text-[#316493]" />
                     <input
                       type="time"
                       step="1"
@@ -271,6 +292,38 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition" onClick={startTimer}>
                       Start Timer
                     </button>
+                  </div>
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-black mt-4"
+                  >
+                    Manage Tags
+                  </Dialog.Title>
+                  <div className="flex flex-col mt-2">
+                    <div className="flex flex-wrap">
+                      {availableTags.map((tag, index) => (
+                        <button
+                          key={index}
+                          className={`flex items-center px-3 py-1 mb-2 rounded mr-2 ${task.tags?.includes(tag) ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                          onClick={() => handleTagClick(tag)}
+                        >
+                          <TagIcon width={16} height={16} className="mr-1" />
+                          {tag}
+                        </button>
+                    ))}
+                    </div>
+                    <div className="flex items-center mt-2">
+                      <input
+                        type="text"
+                        value={newTag}
+                        onChange={handleTagChange}
+                        className="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Add new tag"
+                      />
+                    <button className="ml-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition" onClick={handleAddTag}>
+                      <SquarePlusIcon width={22} height={22} />
+                    </button>
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
