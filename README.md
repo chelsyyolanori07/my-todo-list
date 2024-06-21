@@ -1,1 +1,1 @@
-This todo list project is still in process.. 🙏
+This todo list project is still in progress.. 🙏
