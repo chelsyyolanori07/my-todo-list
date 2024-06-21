@@ -30,7 +30,7 @@
 }
 
 .tag-group {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -43,6 +43,10 @@
 }
 
 .task:hover .button-group {
+  display: flex;
+}
+
+.task:hover .tag-group {
   display: flex;
 }
 

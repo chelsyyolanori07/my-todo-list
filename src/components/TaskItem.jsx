@@ -281,7 +281,6 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     Set Your Timer
                   </Dialog.Title>
                   <div className="flex items-center mt-4 space-x-2 text-base">
-                    <ClockIcon width={25} height={25} className="mr-0 text-[#316493]" />
                     <input
                       type="time"
                       step="1"
