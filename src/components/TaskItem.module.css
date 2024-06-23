@@ -203,3 +203,22 @@
   margin-left: 10px;
   font-size: 1.25rem;
 }
+
+.tag {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #5d87ae;
+  border-radius: 4px;
+  margin-right: 7px;
+  margin-top: 3px;
+}
+
+.tag .close-button {
+  display: none;
+  margin-left: 2px;
+}
+
+.tag:hover .close-button {
+  display: inline-block;
+}

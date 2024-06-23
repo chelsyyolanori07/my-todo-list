@@ -21,7 +21,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const [timeInput, setTimeInput] = useState('00:00:00');
   const [timerExpired, setTimerExpired] = useState(false);
 
-  const [availableTags, setAvailableTags] = useState(["work", "personal", "study"]); // Example initial tags
+  const [availableTags, setAvailableTags] = useState(["work", "personal", "study"]);
   const [newTag, setNewTag] = useState("");
 
   const handleCheckboxChange = () => {
@@ -214,10 +214,10 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
           <div className="flex items-center">
             <TagIcon width={20} height={20} className="mr-1 text-white" />
             {task.tags.map((tag, index) => (
-              <span key={index} className="text-white text-xs rounded mr-2 mt-1 bg-[#5d87ae] px-2 py-1 flex items-center">
+              <span key={index} className={`${styles.tag} text-xs rounded px-2 py-1 flex items-center`}>
                 {tag}
                 <button
-                  className="ml-2 text-white hover:text-red-700"
+                  className={`ml-2 text-white hover:text-red-700 ${styles["close-button"]}`}
                   onClick={() => handleDeleteTag(tag)}
                 >
                   <XMarkIcon width={12} height={12} />
