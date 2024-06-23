@@ -1,6 +1,6 @@
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Dialog, Transition } from '@headlessui/react';
-import { CalendarIcon, CheckIcon, TrashIcon, XMarkIcon, TagIcon } from '@heroicons/react/24/solid';
+import { CalendarIcon, CheckIcon, TagIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { ClockIcon, EllipsisVertical, SquarePlusIcon } from "lucide-react";
 import { Fragment, useEffect, useState } from 'react';
 import styles from './TaskItem.module.css';
@@ -98,6 +98,14 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     }
   };
 
+  const handleDeleteTag = (tag) => {
+    const updatedTaskName = editedTaskName.replace(new RegExp(`#${tag}\\b`, 'gi'), '');
+    const updatedTags = task.tags.filter(t => t !== tag);
+    updateTask({ ...task, tags: updatedTags, name: updatedTaskName });
+    
+    setEditedTaskName(updatedTaskName);
+  };
+  
   const isTaskExpired = task.isExpired;
 
   useEffect(() => {
@@ -206,8 +214,14 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
           <div className="flex items-center">
             <TagIcon width={20} height={20} className="mr-1 text-white" />
             {task.tags.map((tag, index) => (
-              <span key={index} className="text-white text-xs rounded mr-2 mt-1 bg-[#5d87ae] px-2 py-1">
-                {tag.replace('#', '',)}
+              <span key={index} className="text-white text-xs rounded mr-2 mt-1 bg-[#5d87ae] px-2 py-1 flex items-center">
+                {tag}
+                <button
+                  className="ml-2 text-white hover:text-red-700"
+                  onClick={() => handleDeleteTag(tag)}
+                >
+                  <XMarkIcon width={12} height={12} />
+                </button>
               </span>
             ))}
           </div>
