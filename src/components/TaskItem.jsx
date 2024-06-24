@@ -109,8 +109,11 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     const updatedTaskName = editedTaskName.replace(new RegExp(`#${tag}\\b`, 'gi'), '');
     const updatedTags = task.tags.filter(t => t !== tag);
     updateTask({ ...task, tags: updatedTags, name: updatedTaskName });
-    
+  
     setEditedTaskName(updatedTaskName);
+  
+    const updatedAvailableTags = availableTags.filter(t => t !== tag);
+    setAvailableTags(updatedAvailableTags);
   };
   
   const isTaskExpired = task.isExpired;
@@ -139,6 +142,31 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     localStorage.setItem(`timer-${task.id}-remaining`, remainingTime);
     localStorage.setItem(`timer-${task.id}-running`, isTimerRunning);
   }, [initialTime, remainingTime, isTimerRunning, task.id]);
+
+  useEffect(() => {
+    const storedTags = JSON.parse(localStorage.getItem('tags')) || [];
+    setAvailableTags(prevTags => [...prevTags, ...storedTags]);
+
+    const storedTask = JSON.parse(localStorage.getItem(`task-${task.id}`));
+    if (storedTask) {
+      setEditedTaskName(storedTask.name);
+      setSelectedDeadline(storedTask.deadline);
+      setPriority(storedTask.priority);
+    }
+  }, [task.id]);
+
+  useEffect(() => {
+    const customTags = availableTags.filter(tag => !["work", "personal", "study"].includes(tag));
+    localStorage.setItem('tags', JSON.stringify(customTags));
+
+    const taskData = {
+      name: editedTaskName,
+      deadline: selectedDeadline,
+      priority: priority,
+      tags: task.tags
+    };
+    localStorage.setItem(`task-${task.id}`, JSON.stringify(taskData));
+  }, [availableTags, task.tags, editedTaskName, selectedDeadline, priority, task.id]);
 
   const formatTime = (totalSeconds) => {
     const hours = Math.floor(totalSeconds / 3600);
