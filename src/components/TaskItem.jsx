@@ -40,7 +40,12 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const handleEditSubmit = (e) => {
     e.preventDefault();
     const tags = editedTaskName.match(/#[\w]+/g) || [];
-    updateTask({ ...task, name: editedTaskName, tags });
+    const newTags = tags.map(tag => tag.slice(1));
+    const uniqueNewTags = newTags.filter(tag => !availableTags.includes(tag));
+
+    setAvailableTags([...availableTags, ...uniqueNewTags]);
+
+    updateTask({ ...task, name: editedTaskName, tags: newTags });
     setIsEditing(false);
   };
 
@@ -92,9 +97,11 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   };
 
   const handleAddTag = () => {
-    if (newTag.trim() !== "" && !availableTags.includes(newTag.trim())) {
-      setAvailableTags([...availableTags, newTag.trim()]);
+    const trimmedNewTag = newTag.trim();
+    if (trimmedNewTag !== "" && !availableTags.includes(trimmedNewTag)) {
+      setAvailableTags([...availableTags, trimmedNewTag]);
       setNewTag("");
+      updateTask({ ...task, tags: [...task.tags, trimmedNewTag] });
     }
   };
 
