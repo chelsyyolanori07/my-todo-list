@@ -86,9 +86,12 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   };
 
   const handleTagClick = (tag) => {
-    const updatedTags = task.tags.includes(tag)
-      ? task.tags.filter(t => t !== tag)
-      : [...task.tags, tag];
+    const currentTags = task.tags || [];
+  
+    const updatedTags = currentTags.includes(tag)
+      ? currentTags.filter(t => t !== tag)
+      : [...currentTags, tag];
+      
     updateTask({ ...task, tags: updatedTags });
   };
 
@@ -152,6 +155,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
       setEditedTaskName(storedTask.name);
       setSelectedDeadline(storedTask.deadline);
       setPriority(storedTask.priority);
+      updateTask({ ...task, tags: storedTask.tags || [] });
     }
   }, [task.id]);
 
@@ -163,7 +167,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
       name: editedTaskName,
       deadline: selectedDeadline,
       priority: priority,
-      tags: task.tags
+      tags: task.tags || []
     };
     localStorage.setItem(`task-${task.id}`, JSON.stringify(taskData));
   }, [availableTags, task.tags, editedTaskName, selectedDeadline, priority, task.id]);
