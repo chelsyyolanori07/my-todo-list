@@ -365,6 +365,7 @@ hr {
   background-color: hsl(var(--muted));
   transition: transform var(--_tspeed_fast) var(--_ttype_squish),
     background-color var(--_tspeed_fast) var(--_ttype_squish);
+  font-weight: 700;
 }
 
 .input {

@@ -12,6 +12,7 @@
   height: auto;
   margin-bottom: 30px;
   position: relative;
+  min-width: 0.25px;
 }
 
 .task-container {
@@ -24,7 +25,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  --taskgroup-gap: .5em;
+  --taskgroup-gap: .25em;
   gap: var(--taskgroup-gap);
   width: 100%;
 }
@@ -37,13 +38,16 @@
 }
 
 .button-group {
-  display: none;
-  gap: 10px;
-  margin-left: 150px;
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  display: flex;
+  gap: 12px;
+  visibility: hidden;
 }
 
 .task:hover .button-group {
-  display: flex;
+  visibility: visible;
 }
 
 .task:hover .timer-info {
@@ -218,3 +222,4 @@
 .tag:hover .close-button {
   display: inline-block;
 }
+

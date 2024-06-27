@@ -52,7 +52,7 @@ const CustomForm = ({ addTask, setFilter }) => {
   }, [showFilters]);
 
   return (
-    <form className="flex items-center justify-between todo" onSubmit={handleFormSubmit}>
+    <form className="flex items-center justify-between todo space-x-2" onSubmit={handleFormSubmit}>
       <div className="wrapper flex-grow">
         <input
           type="text"
@@ -67,7 +67,7 @@ const CustomForm = ({ addTask, setFilter }) => {
         />
         <label htmlFor="task" className="label">Enter Task</label>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center space-x-0">
         <button
           className="btn"
           aria-label="Add Task"
