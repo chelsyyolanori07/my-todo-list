@@ -399,7 +399,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <div className="flex min-h-full items-center justify-center text-center">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -412,29 +412,31 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-slate-50 p-6 text-left align-middle shadow-xl transition-all">
                   <button
                     type="button"
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                    className="absolute top-2 right-2 text-gray-500"
                     onClick={() => setIsOpen(false)}
                   >
                     <XMarkIcon width={24} height={24} />
                   </button>
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-black"
-                  >
+                  <div className="flex items-center space-x-2">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-lg font-medium leading-6 text-black mr-2"
+                    >
                     Select Deadline
-                  </Dialog.Title>
-                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    </Dialog.Title>
+                      <div className="flex items-center">
+                        <CalendarIcon width={16} height={16} className="text-red-700" />
+                        <span className="text-sm font-semibold text-red-600 ml-1">{formatDate(selectedDeadline)}</span>
+                      </div>
+                  </div>
+                  <div className="flex min-h-full items-center justify-center p-2 text-center">
                     <CalendarDemo
                       task={task}
                       setDeadline={(id, date) => {
-                        setSelectedDeadline(date); 
+                        setSelectedDeadline(date);
                         setDeadline(id, date);
                       }}
                     />
-                  </div>
-                  <div className="flex items-center mt-4 p-2 rounded">
-                    <CalendarIcon width={16} height={16} className="mr-2 text-black" />
-                    <span className="text-black">{formatDate(selectedDeadline)}</span>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
