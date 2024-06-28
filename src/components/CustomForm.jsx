@@ -52,7 +52,7 @@ const CustomForm = ({ addTask, setFilter }) => {
   }, [showFilters]);
 
   return (
-    <form className="flex items-center justify-between todo space-x-2" onSubmit={handleFormSubmit}>
+    <form className="flex items-center justify-between todo" onSubmit={handleFormSubmit}>
       <div className="wrapper flex-grow">
         <input
           type="text"
@@ -67,14 +67,14 @@ const CustomForm = ({ addTask, setFilter }) => {
         />
         <label htmlFor="task" className="label">Enter Task</label>
       </div>
-      <div className="flex items-center space-x-0">
+      <div className="flex items-center">
         <button
           className="btn"
           aria-label="Add Task"
           type="submit"
           ref={buttonRef}
         >
-          <PlusIcon />
+          <PlusIcon className="text-white" />
         </button>
       </div>
       <div className="relative" ref={dropdownRef}>
@@ -84,7 +84,7 @@ const CustomForm = ({ addTask, setFilter }) => {
             className="btn bg-gray-200 text-gray-700 rounded-md px-1 py-1 flex items-center"
             onClick={() => setShowFilters(!showFilters)}
           >
-            <FunnelIcon className="h-6 w-6" />
+            <FunnelIcon className="h-6 w-6 text-white" />
           </button>
         </div>
         {showFilters && (
