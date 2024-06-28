@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from 'react';
 import styles from './TaskItem.module.css';
 import TimerBar from './TimerBar';
 import { CalendarDemo } from "./demo/CalendarDemo";
+import Select, { components } from 'react-select';
 
 const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => {
   const [isChecked, setIsChecked] = useState(task.checked);
@@ -85,16 +86,6 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     setIsTimerRunning(true);
   };
 
-  const handleTagClick = (tag) => {
-    const currentTags = task.tags || [];
-  
-    const updatedTags = currentTags.includes(tag)
-      ? currentTags.filter(t => t !== tag)
-      : [...currentTags, tag];
-      
-    updateTask({ ...task, tags: updatedTags });
-  };
-
   const handleTagChange = (e) => {
     setNewTag(e.target.value);
   };
@@ -104,13 +95,13 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     if (trimmedNewTag !== "" && !availableTags.includes(trimmedNewTag)) {
       setAvailableTags([...availableTags, trimmedNewTag]);
       setNewTag("");
-      updateTask({ ...task, tags: [...task.tags, trimmedNewTag] });
+      updateTask({ ...task, tags: [...(task.tags || []), trimmedNewTag] });
     }
   };
 
   const handleDeleteTag = (tag) => {
     const updatedTaskName = editedTaskName.replace(new RegExp(`#${tag}\\b`, 'gi'), '');
-    const updatedTags = task.tags.filter(t => t !== tag);
+    const updatedTags = (task.tags || []).filter(t => t !== tag);
     updateTask({ ...task, tags: updatedTags, name: updatedTaskName });
   
     setEditedTaskName(updatedTaskName);
@@ -177,6 +168,51 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
     return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+  const handleTagSelect = (selectedOptions) => {
+    const selectedTags = selectedOptions ? selectedOptions.map(option => option.value) : [];
+    updateTask({ ...task, tags: selectedTags });
+  };
+
+  const tagOptions = availableTags.map(tag => ({ value: tag, label: tag }));
+
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      maxHeight: 100, // Set the maximum height for the dropdown menu
+      overflowY: 'auto', // Enable vertical scrolling
+      color: 'black', // Set the text color to black
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      maxHeight: 70, // Set the maximum height for the menu list
+      overflowY: 'auto', // Enable vertical scrolling
+      color: 'black', // Set the text color to black
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      color: state.isSelected ? 'white' : 'black', // Text color for selected and non-selected options
+      backgroundColor: state.isSelected ? 'blue' : 'white', // Background color for selected option
+      '&:hover': {
+        backgroundColor: state.isSelected ? 'blue' : 'lightgray', // Background color on hover
+      },
+      display: 'flex', // Use flexbox for alignment
+      alignItems: 'center', // Center items vertically
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: 'black', // Set the text color for the selected value to black
+    }),
+  };
+
+  const CustomOption = (props) => {
+    return (
+      <components.Option {...props}>
+        <TagIcon className="h-4 w-4 mr-2" />
+        {props.data.label}
+      </components.Option>
+    );
   };
 
   return (
@@ -352,18 +388,17 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     Manage Tags
                   </Dialog.Title>
                   <div className="flex flex-col mt-2">
-                    <div className="flex flex-wrap">
-                      {availableTags.map((tag, index) => (
-                        <button
-                          key={index}
-                          className={`flex items-center px-3 py-1 mb-2 rounded mr-2 ${task.tags?.includes(tag) ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-                          onClick={() => handleTagClick(tag)}
-                        >
-                          <TagIcon width={16} height={16} className="mr-1" />
-                          {tag}
-                        </button>
-                    ))}
-                    </div>
+                  <Select
+                    isMulti
+                    name="tags"
+                    options={tagOptions}
+                    value={(task.tags || []).map(tag => ({ value: tag, label: tag }))}
+                    onChange={handleTagSelect}
+                    styles={customStyles}
+                    components={{ Option: CustomOption }}
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                  />
                     <div className="flex items-center mt-2">
                       <input
                         type="text"
