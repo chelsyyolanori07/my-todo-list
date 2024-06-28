@@ -1,12 +1,12 @@
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Dialog, Transition } from '@headlessui/react';
 import { CalendarIcon, CheckIcon, TagIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import { ClockIcon, EllipsisVertical, SquarePlusIcon } from "lucide-react";
+import { ClockIcon, EllipsisVertical, SquarePlusIcon, PlayIcon, PauseIcon } from "lucide-react";
 import { Fragment, useEffect, useState } from 'react';
+import Select, { components } from 'react-select';
 import styles from './TaskItem.module.css';
 import TimerBar from './TimerBar';
 import { CalendarDemo } from "./demo/CalendarDemo";
-import Select, { components } from 'react-select';
 
 const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => {
   const [isChecked, setIsChecked] = useState(task.checked);
@@ -84,6 +84,10 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
 
   const startTimer = () => {
     setIsTimerRunning(true);
+  };
+
+  const stopTimer = () => {
+    setIsTimerRunning(false);
   };
 
   const handleTagChange = (e) => {
@@ -377,8 +381,8 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                       onChange={handleTimerChange}
                       className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
-                    <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition" onClick={startTimer}>
-                      Start Timer
+                    <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition" onClick={isTimerRunning ? stopTimer : startTimer}>
+                      {isTimerRunning ? <PauseIcon /> : <PlayIcon />}
                     </button>
                   </div>
                   <Dialog.Title
