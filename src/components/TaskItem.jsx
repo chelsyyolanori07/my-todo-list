@@ -180,29 +180,29 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const customStyles = {
     menu: (provided) => ({
       ...provided,
-      maxHeight: 100, // Set the maximum height for the dropdown menu
-      overflowY: 'auto', // Enable vertical scrolling
-      color: 'black', // Set the text color to black
+      maxHeight: 100,
+      overflowY: 'auto',
+      color: 'black',
     }),
     menuList: (provided) => ({
       ...provided,
-      maxHeight: 70, // Set the maximum height for the menu list
-      overflowY: 'auto', // Enable vertical scrolling
-      color: 'black', // Set the text color to black
+      maxHeight: 70,
+      overflowY: 'auto',
+      color: 'black',
     }),
     option: (provided, state) => ({
       ...provided,
-      color: state.isSelected ? 'white' : 'black', // Text color for selected and non-selected options
-      backgroundColor: state.isSelected ? 'blue' : 'white', // Background color for selected option
+      color: state.isSelected ? 'white' : 'black',
+      backgroundColor: state.isSelected ? 'blue' : 'white',
       '&:hover': {
-        backgroundColor: state.isSelected ? 'blue' : 'lightgray', // Background color on hover
+        backgroundColor: state.isSelected ? 'blue' : 'lightgray',
       },
-      display: 'flex', // Use flexbox for alignment
-      alignItems: 'center', // Center items vertically
+      display: 'flex',
+      alignItems: 'center',
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: 'black', // Set the text color for the selected value to black
+      color: 'black',
     }),
   };
 
