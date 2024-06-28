@@ -230,14 +230,14 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
             aria-label={`Set priority for ${task.name} Task`}
             onClick={() => setIsPriorityOpen(true)}
           >
-            <EllipsisVertical width={12} height={12} className="text-black" />
+            <EllipsisVertical width={12} height={12} className="text-white" />
           </button>
           <button
             className="btn"
             aria-label={`Set deadline for ${task.name} Task`}
             onClick={() => setIsOpen(true)}
           >
-            <CalendarIcon width={12} height={12} className="text-black" />
+            <CalendarIcon width={12} height={12} className="text-white" />
           </button>
           <button
             className={`btn ${styles.delete}`}
