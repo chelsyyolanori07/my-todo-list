@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 
-export default function useTagManager(initialTags) {
+export default function useTagManager(initialTags = []) {
   const [availableTags, setAvailableTags] = useState([]);
 
   useEffect(() => {
     const storedTags = JSON.parse(localStorage.getItem('tags')) || [];
-    const filteredInitialTags = initialTags.filter(tag => !storedTags.includes(tag));
-    setAvailableTags([...filteredInitialTags, ...storedTags]);
+    const allTags = [...new Set([...initialTags, ...storedTags])];
+    setAvailableTags(prevTags => {
+      if (JSON.stringify(prevTags) !== JSON.stringify(allTags)) {
+        return allTags;
+      }
+      return prevTags;
+    });
   }, [initialTags]);
 
   const addTag = (tag) => {

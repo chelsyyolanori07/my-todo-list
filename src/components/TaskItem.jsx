@@ -23,7 +23,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const [timeInput, setTimeInput] = useState('00:00:00');
   const [timerExpired, setTimerExpired] = useState(false);
 
-  const { availableTags, addTag, removeTag } = useTagManager(["work", "personal", "study"]);
+  const { availableTags, addTag } = useTagManager(["work", "personal", "study"]);
   const [newTag, setNewTag] = useState("");
 
   const handleCheckboxChange = () => {
@@ -103,9 +103,9 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
 
   const handleDeleteTag = (tagToDelete) => {
     const updatedTags = task.tags.filter(tag => tag !== tagToDelete);
-    updateTask({ ...task, tags: updatedTags });
-    removeTag(tagToDelete);
-  };  
+    const updatedTaskName = task.name.replace(new RegExp(`#${tagToDelete}\\b`, 'g'), '').trim();
+    updateTask({ ...task, name: updatedTaskName, tags: updatedTags });
+  };
   
   const isTaskExpired = task.isExpired;
 
@@ -147,11 +147,11 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   };
 
   useEffect(() => {
-  if (task.tags) {
-    const newTags = task.tags.filter(tag => !availableTags.includes(tag));
-    newTags.forEach(tag => addTag(tag));
-  }
-}, [task.tags, availableTags]);
+    if (task.tags) {
+      const newTags = task.tags.filter(tag => !availableTags.includes(tag));
+      newTags.forEach(tag => addTag(tag));
+    }
+  }, [task.tags, availableTags]);
 
   const tagOptions = availableTags.map(tag => ({ value: tag, label: tag }));
 
