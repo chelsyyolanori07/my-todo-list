@@ -1,7 +1,8 @@
 import useLocalStorage from "@/hooks/useLocalStorage";
+import useTagManager from "@/hooks/useTagManager";
 import { Dialog, Transition } from '@headlessui/react';
 import { CalendarIcon, CheckIcon, TagIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
-import { ClockIcon, EllipsisVertical, SquarePlusIcon, PlayIcon, PauseIcon } from "lucide-react";
+import { ClockIcon, EllipsisVertical, PauseIcon, PlayIcon, SquarePlusIcon } from "lucide-react";
 import { Fragment, useEffect, useState } from 'react';
 import Select, { components } from 'react-select';
 import styles from './TaskItem.module.css';
@@ -22,7 +23,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const [timeInput, setTimeInput] = useState('00:00:00');
   const [timerExpired, setTimerExpired] = useState(false);
 
-  const [availableTags, setAvailableTags] = useState(["work", "personal", "study"]);
+  const { availableTags, addTag, removeTag } = useTagManager(["work", "personal", "study"]);
   const [newTag, setNewTag] = useState("");
 
   const handleCheckboxChange = () => {
@@ -42,10 +43,6 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     e.preventDefault();
     const tags = editedTaskName.match(/#[\w]+/g) || [];
     const newTags = tags.map(tag => tag.slice(1));
-    const uniqueNewTags = newTags.filter(tag => !availableTags.includes(tag));
-
-    setAvailableTags([...availableTags, ...uniqueNewTags]);
-
     updateTask({ ...task, name: editedTaskName, tags: newTags });
     setIsEditing(false);
   };
@@ -96,23 +93,19 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
 
   const handleAddTag = () => {
     const trimmedNewTag = newTag.trim();
-    if (trimmedNewTag !== "" && !availableTags.includes(trimmedNewTag)) {
-      setAvailableTags([...availableTags, trimmedNewTag]);
+    if (trimmedNewTag !== "" && !task.tags.includes(trimmedNewTag)) {
+      const updatedTags = [...task.tags, trimmedNewTag];
+      updateTask({ ...task, tags: updatedTags });
+      addTag(trimmedNewTag);
       setNewTag("");
-      updateTask({ ...task, tags: [...(task.tags || []), trimmedNewTag] });
     }
   };
 
-  const handleDeleteTag = (tag) => {
-    const updatedTaskName = editedTaskName.replace(new RegExp(`#${tag}\\b`, 'gi'), '');
-    const updatedTags = (task.tags || []).filter(t => t !== tag);
-    updateTask({ ...task, tags: updatedTags, name: updatedTaskName });
-  
-    setEditedTaskName(updatedTaskName);
-  
-    const updatedAvailableTags = availableTags.filter(t => t !== tag);
-    setAvailableTags(updatedAvailableTags);
-  };
+  const handleDeleteTag = (tagToDelete) => {
+    const updatedTags = task.tags.filter(tag => tag !== tagToDelete);
+    updateTask({ ...task, tags: updatedTags });
+    removeTag(tagToDelete);
+  };  
   
   const isTaskExpired = task.isExpired;
 
@@ -141,32 +134,6 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     localStorage.setItem(`timer-${task.id}-running`, isTimerRunning);
   }, [initialTime, remainingTime, isTimerRunning, task.id]);
 
-  useEffect(() => {
-    const storedTags = JSON.parse(localStorage.getItem('tags')) || [];
-    setAvailableTags(prevTags => [...prevTags, ...storedTags]);
-
-    const storedTask = JSON.parse(localStorage.getItem(`task-${task.id}`));
-    if (storedTask) {
-      setEditedTaskName(storedTask.name);
-      setSelectedDeadline(storedTask.deadline);
-      setPriority(storedTask.priority);
-      updateTask({ ...task, tags: storedTask.tags || [] });
-    }
-  }, [task.id]);
-
-  useEffect(() => {
-    const customTags = availableTags.filter(tag => !["work", "personal", "study"].includes(tag));
-    localStorage.setItem('tags', JSON.stringify(customTags));
-
-    const taskData = {
-      name: editedTaskName,
-      deadline: selectedDeadline,
-      priority: priority,
-      tags: task.tags || []
-    };
-    localStorage.setItem(`task-${task.id}`, JSON.stringify(taskData));
-  }, [availableTags, task.tags, editedTaskName, selectedDeadline, priority, task.id]);
-
   const formatTime = (totalSeconds) => {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -178,6 +145,13 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     const selectedTags = selectedOptions ? selectedOptions.map(option => option.value) : [];
     updateTask({ ...task, tags: selectedTags });
   };
+
+  useEffect(() => {
+  if (task.tags) {
+    const newTags = task.tags.filter(tag => !availableTags.includes(tag));
+    newTags.forEach(tag => addTag(tag));
+  }
+}, [task.tags, availableTags]);
 
   const tagOptions = availableTags.map(tag => ({ value: tag, label: tag }));
 
