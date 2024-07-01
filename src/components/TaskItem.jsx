@@ -93,9 +93,13 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
 
   const handleAddTag = () => {
     const trimmedNewTag = newTag.trim();
-    if (trimmedNewTag !== "" && !task.tags.includes(trimmedNewTag)) {
+    if (task.tags && !task.tags.includes(trimmedNewTag)) {
       const updatedTags = [...task.tags, trimmedNewTag];
       updateTask({ ...task, tags: updatedTags });
+      addTag(trimmedNewTag);
+      setNewTag("");
+    } else if (!task.tags) {
+      updateTask({ ...task, tags: [trimmedNewTag] });
       addTag(trimmedNewTag);
       setNewTag("");
     }
@@ -190,6 +194,28 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
         <TagIcon className="h-4 w-4 mr-2" />
         {props.data.label}
       </components.Option>
+    );
+  };
+
+  const NoOptionsMessage = (props) => {
+    return (
+      <components.NoOptionsMessage {...props}>
+        <div className="flex items-center">
+          <input
+            type="text"
+            value={newTag}
+            onChange={handleTagChange}
+            className="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Add new tag"
+          />
+          <button
+            className="ml-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition"
+            onClick={handleAddTag}
+          >
+            <SquarePlusIcon width={22} height={22} />
+          </button>
+        </div>
+      </components.NoOptionsMessage>
     );
   };
 
@@ -373,19 +399,26 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     value={(task.tags || []).map(tag => ({ value: tag, label: tag }))}
                     onChange={handleTagSelect}
                     styles={customStyles}
-                    components={{ Option: CustomOption }}
+                    components={{ Option: CustomOption, NoOptionsMessage }}
+                    inputValue={newTag}
+                    onInputChange={(value) => setNewTag(value)}
                     className="basic-multi-select"
                     classNamePrefix="select"
+                    placeholder="Select tags or add new..."
                   />
                     <div className="flex items-center mt-2">
                       <input
                         type="text"
                         value={newTag}
                         onChange={handleTagChange}
-                        className="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className={`flex-grow p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                        style={{ visibility:'hidden'}}
                         placeholder="Add new tag"
                       />
-                    <button className="ml-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition" onClick={handleAddTag}>
+                    <button 
+                      className={`ml-2 p-2 bg-blue-50 rounded-md hover:bg-blue-400 transition`}
+                      style={{ visibility:'hidden'}}
+                    >
                       <SquarePlusIcon width={22} height={22} />
                     </button>
                     </div>
