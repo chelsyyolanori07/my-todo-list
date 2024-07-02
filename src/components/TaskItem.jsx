@@ -23,7 +23,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const [timeInput, setTimeInput] = useState('00:00:00');
   const [timerExpired, setTimerExpired] = useState(false);
 
-  const { availableTags, addTag } = useTagManager(["work", "personal", "study"]);
+  const { availableTags, addTag, removeTagFromTask, deleteTagPermanently } = useTagManager(["work", "personal", "study"]);
   const [newTag, setNewTag] = useState("");
 
   const handleCheckboxChange = () => {
@@ -105,10 +105,18 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     }
   };
 
-  const handleDeleteTag = (tagToDelete) => {
+  const handleRemoveTagFromTask = (tagToRemove) => {
+    const updatedTags = task.tags.filter(tag => tag !== tagToRemove);
+    const updatedTaskName = task.name.replace(new RegExp(`#${tagToRemove}\\b`, 'g'), '').trim();
+    updateTask({ ...task, name: updatedTaskName, tags: updatedTags });
+    removeTagFromTask(tagToRemove);
+  };
+
+  const handleDeleteTagPermanently = (tagToDelete) => {
     const updatedTags = task.tags.filter(tag => tag !== tagToDelete);
     const updatedTaskName = task.name.replace(new RegExp(`#${tagToDelete}\\b`, 'g'), '').trim();
     updateTask({ ...task, name: updatedTaskName, tags: updatedTags });
+    deleteTagPermanently(tagToDelete);
   };
   
   const isTaskExpired = task.isExpired;
@@ -193,6 +201,15 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
       <components.Option {...props}>
         <TagIcon className="h-4 w-4 mr-2" />
         {props.data.label}
+        <button
+        className="ml-auto text-gray-500 hover:text-red-700"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleDeleteTagPermanently(props.data.value);
+        }}
+      >
+        <XMarkIcon width={12} height={12} />
+      </button>
       </components.Option>
     );
   };
@@ -297,7 +314,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 {tag}
                 <button
                   className={`ml-2 text-white hover:text-red-700 ${styles["close-button"]}`}
-                  onClick={() => handleDeleteTag(tag)}
+                  onClick={() => handleRemoveTagFromTask(tag)}
                 >
                   <XMarkIcon width={12} height={12} />
                 </button>

@@ -20,11 +20,32 @@ export default function useTagManager(initialTags = []) {
     localStorage.setItem('tags', JSON.stringify(updatedTags));
   };
 
-  const removeTag = (tag) => {
-    const updatedTags = availableTags.filter(t => t !== tag);
-    setAvailableTags(updatedTags);
-    localStorage.setItem('tags', JSON.stringify(updatedTags));
+  const removeTagFromTask = (tagToRemove) => {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const updatedTasks = tasks.map(task => {
+      if (task.tags.includes(tagToRemove)) {
+        return {
+          ...task,
+          tags: task.tags.filter(tag => tag !== tagToRemove)
+        };
+      }
+      return task;
+    });
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
   };
 
-  return { availableTags, addTag, removeTag };
+  const deleteTagPermanently = (tagToDelete) => {
+    const updatedTags = availableTags.filter(tag => tag !== tagToDelete);
+    setAvailableTags(updatedTags);
+    localStorage.setItem('tags', JSON.stringify(updatedTags));
+
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const updatedTasks = tasks.map(task => ({
+      ...task,
+      tags: task.tags.filter(tag => tag !== tagToDelete)
+    }));
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+  };
+
+  return { availableTags, addTag, removeTagFromTask, deleteTagPermanently };
 }
