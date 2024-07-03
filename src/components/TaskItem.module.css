@@ -12,7 +12,7 @@
   height: auto;
   margin-bottom: 30px;
   position: relative;
-  min-width: 0.25px;
+  box-sizing: border-box;
 }
 
 .task-container {
@@ -43,15 +43,15 @@
   right: 10px;
   display: flex;
   gap: 12px;
-  visibility: hidden;
+  opacity: 0;
 }
 
 .task:hover .button-group {
-  visibility: visible;
+  opacity: 1;
 }
 
 .task:hover .timer-info {
-  display: none;
+  opacity: 0;
 }
 
 .edit-form {
