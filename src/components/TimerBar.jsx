@@ -27,7 +27,7 @@ const TimerBar = ({ initialTime, remainingTime, setRemainingTime, isTimerRunning
   return (
   <div className={styles.timerBar}>
     <div className={styles.timerFill} style={{ width: `${timerFill}%` }}></div>
-      <audio ref={audioRef} src="src/Ding Sound Effect.mp3" preload="auto"></audio>
+      <audio ref={audioRef} src="/Ding Sound Effect.mp3" preload="auto"></audio>
     <button onClick={() => audioRef.current && audioRef.current.play()}>Test Sound</button>
   </div>
   );
