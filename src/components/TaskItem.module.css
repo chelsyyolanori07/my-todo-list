@@ -13,12 +13,18 @@
   margin-bottom: 30px;
   position: relative;
   box-sizing: border-box;
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .task-container {
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+
+.task:hover {
+  border-color: hsl(var(--accent));
+  box-shadow: 2px 5px 10px hsl(var(--accent) / 0.5);
 }
 
 .task-group {
@@ -35,6 +41,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 0%;
 }
 
 .button-group {
@@ -91,13 +98,6 @@
 
 .checkbox:focus {
   outline: none;
-}
-
-.checkbox:is(:focus-visible, :hover) {
-  box-shadow:
-    0 0 0 hsl(var(--bg)),
-    0 0 0 .05em hsl(var(--accent)),
-    0 0 0 .225em hsl(var(--accent) / .3);
 }
 
 .checkmark {

@@ -168,29 +168,65 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const tagOptions = availableTags.map(tag => ({ value: tag, label: tag }));
 
   const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: 'rgb(243, 244, 246)',
+      borderColor: state.isFocused ? 'rgb(37, 84, 123)' : 'gray',
+      boxShadow: state.isFocused ? '0 0 0 3px rgb(37, 84, 123)' : 'none',
+      color: 'black',
+      '&:hover': {
+        borderColor: 'rgb(37, 84, 123)',
+      },
+    }),
     menu: (provided) => ({
       ...provided,
       maxHeight: 100,
       overflowY: 'auto',
       color: 'black',
+      backgroundColor: 'rgb(37, 84, 123)',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.8)',
     }),
     menuList: (provided) => ({
       ...provided,
       maxHeight: 70,
       overflowY: 'auto',
       color: 'black',
+      backgroundColor: '#f0f0f0',
     }),
     option: (provided, state) => ({
       ...provided,
       color: state.isSelected ? 'white' : 'black',
       backgroundColor: state.isSelected ? 'blue' : 'white',
       '&:hover': {
-        backgroundColor: state.isSelected ? 'blue' : 'lightgray',
+        backgroundColor: state.isSelected ? 'none' : 'rgba(59, 130, 246, 0.5)',
       },
       display: 'flex',
       alignItems: 'center',
     }),
     singleValue: (provided) => ({
+      ...provided,
+      color: 'black',
+    }),
+    multiValue: (provided) => ({
+      ...provided,
+      backgroundColor: 'rgb(37, 84, 123)',
+      borderRadius: '2px',
+      padding: '2px 5px',
+    }),
+    multiValueLabel: (provided) => ({
+      ...provided,
+      color: 'white',
+      fontWeight: 'bold',
+    }),
+    multiValueRemove: (provided) => ({
+      ...provided,
+      color: 'white',
+      '&:hover': {
+        backgroundColor: 'rgb(192, 54, 5)',
+        color: 'white',
+      },
+    }),
+    placeholder: (provided) => ({
       ...provided,
       color: 'black',
     }),
@@ -208,7 +244,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
           handleDeleteTagPermanently(props.data.value);
         }}
       >
-        <XMarkIcon width={12} height={12} />
+        <XMarkIcon width={12} height={12} className="text-black" />
       </button>
       </components.Option>
     );
@@ -222,7 +258,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
             type="text"
             value={newTag}
             onChange={handleTagChange}
-            className="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
             placeholder="Add new tag"
           />
           <button
@@ -359,19 +395,19 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-slate-50 p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[hsl(var(--accent))] p-6 text-left align-middle shadow-xl transition-all">
                   <button
                     type="button"
                     className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
                     onClick={() => setIsPriorityOpen(false)}
                   >
-                    <XMarkIcon width={24} height={24} />
+                    <XMarkIcon width={20} height={20} className="text-white"/>
                   </button>
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-black"
+                    className="text-lg font-medium leading-6 text-white"
                   >
-                    Select Priority
+                    Choose Task Priority 📌
                   </Dialog.Title>
                   <div className="flex flex-row mt-4 space-x-3">
                     {[1, 2, 3, 4].map((p) => (
@@ -386,9 +422,9 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                   </div>
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-black mt-4"
+                    className="text-lg font-medium leading-6 text-white mt-6"
                   >
-                    Set Your Timer
+                    Set The Timer ⏰
                   </Dialog.Title>
                   <div className="flex items-center mt-4 space-x-2 text-base">
                     <input
@@ -396,7 +432,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                       step="1"
                       value={timeInput}
                       onChange={handleTimerChange}
-                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-blue-500 text-white"
                     />
                     <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition" onClick={isTimerRunning ? stopTimer : startTimer}>
                       {isTimerRunning ? <PauseIcon /> : <PlayIcon />}
@@ -404,11 +440,11 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                   </div>
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-black mt-4"
+                    className="text-lg font-medium leading-6 text-white mt-6"
                   >
-                    Manage Tags
+                     Manage Tags 🏷️
                   </Dialog.Title>
-                  <div className="flex flex-col mt-2">
+                  <div className="flex flex-col mt-4">
                   <Select
                     isMulti
                     name="tags"
@@ -421,7 +457,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     onInputChange={(value) => setNewTag(value)}
                     className="basic-multi-select"
                     classNamePrefix="select"
-                    placeholder="Select tags or add new..."
+                    placeholder="Select tags or add new tag..."
                   />
                     <div className="flex items-center mt-2">
                       <input
@@ -472,27 +508,27 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-slate-50 p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[hsl(var(--accent))] p-6 text-left align-middle shadow-xl transition-all">
                   <button
                     type="button"
                     className="absolute top-2 right-2 text-gray-500"
                     onClick={() => setIsOpen(false)}
                   >
-                    <XMarkIcon width={24} height={24} />
+                    <XMarkIcon width={20} height={20} className="text-white"/>
                   </button>
                   <div className="flex items-center space-x-2">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-black mr-2"
+                      className="text-lg font-medium leading-6 text-white mr-2 ml-12 text-center"
                     >
-                    Select Deadline
+                    🎯 Select Deadline
                     </Dialog.Title>
                       <div className="flex items-center">
-                        <CalendarIcon width={16} height={16} className="text-red-700" />
-                        <span className="text-sm font-semibold text-red-600 ml-1">{formatDate(selectedDeadline)}</span>
+                        <CalendarIcon width={16} height={16} className="text-white" />
+                        <span className="text-sm font-semibold text-blue-500 ml-1">{formatDate(selectedDeadline)}</span>
                       </div>
                   </div>
-                  <div className="flex min-h-full items-center justify-center p-2 text-center">
+                  <div className="flex min-h-full items-center justify-center p-2 mr-0.5 ml-0.5 text-center">
                     <CalendarDemo
                       task={task}
                       setDeadline={(id, date) => {
