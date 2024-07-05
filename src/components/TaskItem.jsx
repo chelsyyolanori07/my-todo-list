@@ -395,7 +395,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[hsl(var(--accent))] p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white">
                   <button
                     type="button"
                     className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -508,7 +508,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[hsl(var(--accent))] p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white">
                   <button
                     type="button"
                     className="absolute top-2 right-2 text-gray-500"
@@ -516,17 +516,21 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                   >
                     <XMarkIcon width={20} height={20} className="text-white"/>
                   </button>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 justify-center">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-white mr-2 ml-12 text-center"
+                      className="text-lg font-medium leading-6 text-white mr-2 text-center"
                     >
                     🎯 Select Deadline
                     </Dialog.Title>
-                      <div className="flex items-center">
+                    {selectedDeadline && (
+                      <div className="flex items-center ml-2">
                         <CalendarIcon width={16} height={16} className="text-white" />
-                        <span className="text-sm font-semibold text-blue-500 ml-1">{formatDate(selectedDeadline)}</span>
+                        <span className="text-sm font-semibold text-gray-400 ml-1">
+                          {formatDate(selectedDeadline)}
+                        </span>
                       </div>
+                    )}
                   </div>
                   <div className="flex min-h-full items-center justify-center p-2 mr-0.5 ml-0.5 text-center">
                     <CalendarDemo

@@ -403,9 +403,9 @@ hr {
   background-color: #25547B;
 }
 
-.text-blue-500 {
-  color: #ffffff;
-  background-color: #25547B;
+.text-gray-400 {
+  color: #000000;
+  background-color: #b8b9c6;
   padding: 3px;
   border-radius: 20%;
 }

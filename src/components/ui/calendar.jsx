@@ -16,7 +16,7 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       selected={selected}
       onSelect={onSelect}
-      className={cn("p-10 bg-[#C1D6DA] rounded-lg shadow-md", className)}
+      className={cn("p-10 bg-[#b8b9c6] rounded-lg border-2 border-white shadow-lg", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
@@ -37,11 +37,11 @@ function Calendar({
         day: cn(
           buttonVariants({ variant: "ghost" }),
           "h-10 w-10 p-0 font-normal aria-selected:opacity-100 rounded-full",
-          "hover:bg-transparant" // Remove hover effect
+          "hover:bg-transparant"
         ),
         day_range_end: "day-range-end",
         day_selected: "bg-[#25547B] text-white",
-        day_today: "bg-[#E63F3F] text-white",
+        day_today: "bg-[#E60909] text-white",
         day_outside: "text-gray-600",
         day_disabled: "text-gray-400",
         day_range_middle: "bg-blue-200 text-blue-800",
