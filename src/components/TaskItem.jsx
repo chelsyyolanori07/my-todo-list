@@ -1,7 +1,7 @@
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useTagManager from "@/hooks/useTagManager";
 import { Dialog, Transition } from '@headlessui/react';
-import { CalendarIcon, CheckIcon, TagIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { CalendarIcon, CheckIcon, FlagIcon, TagIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { ClockIcon, EllipsisVertical, PauseIcon, PlayIcon, SquarePlusIcon } from "lucide-react";
 import { Fragment, useEffect, useState } from 'react';
 import Select, { components } from 'react-select';
@@ -273,7 +273,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   };
 
   return (
-    <li className={`${styles.task} relative ${isTaskExpired ? 'bg-blue-500' : ''}`}>
+    <li className={`${styles.task} relative ${isTaskExpired ? 'text-red-100' : ''}`}>
       <div className={styles["task-container"]}>
         <div className={styles["task-group"]}>
           <input
@@ -293,7 +293,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 onChange={handleEditChange}
                 onKeyDown={handleKeyDown}
                 autoFocus
-                required
+                required 
               />
             </form>
           ) : (
@@ -341,23 +341,33 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
           </button>
         </div>
       </div>
-      <div className={styles["tag-group"]}>
-        {task.tags && task.tags.length > 0 && (
-          <div className="flex items-center">
-            <TagIcon width={20} height={20} className="mr-1 text-white" />
-            {task.tags.map((tag, index) => (
-              <span key={index} className={`${styles.tag} text-xs rounded px-2 py-1 flex items-center`}>
-                {tag}
-                <button
-                  className={`ml-2 text-white hover:text-red-700 ${styles["close-button"]}`}
-                  onClick={() => handleRemoveTagFromTask(tag)}
-                >
-                  <XMarkIcon width={12} height={12} />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
+      <div className={styles["tag-priority-container"]}>
+        <div className={styles["tag-group"]}>
+          {task.tags && task.tags.length > 0 && (
+            <div className="flex items-center">
+              <TagIcon width={20} height={20} className="mr-1 text-white" />
+              {task.tags.map((tag, index) => (
+                <span key={index} className={`${styles.tag} text-xs rounded px-2 py-1 flex items-center border-2 border-white`}>
+                  {tag}
+                  <button
+                    className={`ml-2 text-white ${styles["close-button"]}`}
+                    onClick={() => handleRemoveTagFromTask(tag)}
+                  >
+                    <XMarkIcon width={12} height={12} />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+          {task.priority && (
+            <div className={styles["priority-info"]}>
+              <FlagIcon width={20} height={20} className={styles.priorityIcon} />
+              <div className={styles.priorityNumber}>
+                {task.priority}
+              </div>
+            </div>
+          )}
       </div>
       <div className={styles.timerContainer}>
         <TimerBar
@@ -398,22 +408,22 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white">
                   <button
                     type="button"
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                    className="absolute top-2 right-2 bg-blue-500 text-gray-500 hover:text-gray-700"
                     onClick={() => setIsPriorityOpen(false)}
                   >
-                    <XMarkIcon width={20} height={20} className="text-white"/>
+                    <XMarkIcon width={22} height={22} className="text-white"/>
                   </button>
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-white"
                   >
-                    Choose Task Priority 📌
+                    Choose Task Priority
                   </Dialog.Title>
                   <div className="flex flex-row mt-4 space-x-3">
                     {[1, 2, 3, 4].map((p) => (
                       <button
                         key={p}
-                        className={`px-4 py-2 mb-2 rounded ${priority === p ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black'}`}
+                        className={`w-10 h-10 flex items-center justify-center rounded-lg text-xl transition-colors duration-300 border ${priority === p ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black hover:bg-gray-200'}`}
                         onClick={() => handlePriorityChange(p)}
                       >
                         {p}
@@ -424,7 +434,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     as="h3"
                     className="text-lg font-medium leading-6 text-white mt-6"
                   >
-                    Set The Timer ⏰
+                    Set The Timer
                   </Dialog.Title>
                   <div className="flex items-center mt-4 space-x-2 text-base">
                     <input
@@ -434,7 +444,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                       onChange={handleTimerChange}
                       className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-blue-500 text-white"
                     />
-                    <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition" onClick={isTimerRunning ? stopTimer : startTimer}>
+                    <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-[#074072] transition" onClick={isTimerRunning ? stopTimer : startTimer}>
                       {isTimerRunning ? <PauseIcon /> : <PlayIcon />}
                     </button>
                   </div>
@@ -442,7 +452,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     as="h3"
                     className="text-lg font-medium leading-6 text-white mt-6"
                   >
-                     Manage Tags 🏷️
+                     Manage Tags
                   </Dialog.Title>
                   <div className="flex flex-col mt-4">
                   <Select
@@ -511,17 +521,17 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white">
                   <button
                     type="button"
-                    className="absolute top-2 right-2 text-gray-500"
+                    className="absolute top-2 right-2 bg-blue-500 text-gray-500"
                     onClick={() => setIsOpen(false)}
                   >
-                    <XMarkIcon width={20} height={20} className="text-white"/>
+                    <XMarkIcon width={22} height={22} className="text-white"/>
                   </button>
                   <div className="flex items-center space-x-2 justify-center">
                     <Dialog.Title
                       as="h3"
                       className="text-lg font-medium leading-6 text-white mr-2 text-center"
                     >
-                    🎯 Select Deadline
+                    Select Deadline
                     </Dialog.Title>
                     {selectedDeadline && (
                       <div className="flex items-center ml-2">

@@ -5,7 +5,7 @@
   justify-content: space-between;
   gap: 0.6em;
   font-size: 1.2rem;
-  border: 0.2em solid hsl(var(--muted) / 0.8);
+  border: 0.23em solid hsl(var(--muted) / 0.8);
   padding: 0.6em;
   border-radius: calc(var(--_radius) * 2);
   width: 100%;
@@ -208,7 +208,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  background-color: #5d87ae;
+  background-color: #25547B;
   border-radius: 4px;
   margin-right: 7px;
   margin-top: 3px;
@@ -223,3 +223,34 @@
   display: inline-block;
 }
 
+.tag-priority-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    --taskgroup-gap: .25em;
+    gap: var(--taskgroup-gap);
+    width: 100%;
+    margin-top: 2px;
+}
+
+.priority-info {
+  display: flex;
+  align-items: center;
+  margin-left: 200px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.priorityIcon {
+  color: white;
+}
+
+.priorityNumber {
+  font-size: 12px;
+  color: white;
+  margin-left: 3px;
+}
+
+.task:hover .priority-info {
+  opacity: 1;
+}
