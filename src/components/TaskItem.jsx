@@ -171,11 +171,11 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     control: (provided, state) => ({
       ...provided,
       backgroundColor: 'rgb(243, 244, 246)',
-      borderColor: state.isFocused ? 'rgb(37, 84, 123)' : 'gray',
-      boxShadow: state.isFocused ? '0 0 0 3px rgb(37, 84, 123)' : 'none',
+      borderColor: state.isFocused ? 'hsl(var(--accent))' : 'gray',
+      boxShadow: state.isFocused ? '0 0 0 3px hsl(var(--accent))' : 'none',
       color: 'black',
       '&:hover': {
-        borderColor: 'rgb(37, 84, 123)',
+        borderColor: 'hsl(var(--accent))',
       },
     }),
     menu: (provided) => ({
@@ -183,7 +183,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
       maxHeight: 100,
       overflowY: 'auto',
       color: 'black',
-      backgroundColor: 'rgb(37, 84, 123)',
+      backgroundColor: 'hsl(var(--accent))',
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.8)',
     }),
     menuList: (provided) => ({
@@ -202,6 +202,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
       },
       display: 'flex',
       alignItems: 'center',
+      border: '2px'
     }),
     singleValue: (provided) => ({
       ...provided,
@@ -209,7 +210,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     }),
     multiValue: (provided) => ({
       ...provided,
-      backgroundColor: 'rgb(37, 84, 123)',
+      backgroundColor: 'hsl(var(--accent))',
       borderRadius: '2px',
       padding: '2px 5px',
     }),
@@ -222,7 +223,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
       ...provided,
       color: 'white',
       '&:hover': {
-        backgroundColor: 'rgb(192, 54, 5)',
+        backgroundColor: 'transparent',
         color: 'white',
       },
     }),
@@ -347,7 +348,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
             <div className="flex items-center">
               <TagIcon width={20} height={20} className="mr-1 text-white" />
               {task.tags.map((tag, index) => (
-                <span key={index} className={`${styles.tag} text-xs rounded px-2 py-1 flex items-center border-2 border-white`}>
+                <span key={index} className={`${styles.tag} text-xs rounded px-2 py-1 flex items-center`}>
                   {tag}
                   <button
                     className={`ml-2 text-white ${styles["close-button"]}`}
@@ -408,10 +409,10 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white">
                   <button
                     type="button"
-                    className="absolute top-2 right-2 bg-blue-500 text-gray-500 hover:text-gray-700"
+                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
                     onClick={() => setIsPriorityOpen(false)}
                   >
-                    <XMarkIcon width={22} height={22} className="text-white"/>
+                    <XMarkIcon width={22} height={22} className="text-white font-bold"/>
                   </button>
                   <Dialog.Title
                     as="h3"
@@ -423,7 +424,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                     {[1, 2, 3, 4].map((p) => (
                       <button
                         key={p}
-                        className={`w-10 h-10 flex items-center justify-center rounded-lg text-xl transition-colors duration-300 border ${priority === p ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black hover:bg-gray-200'}`}
+                        className={`w-10 h-10 flex items-center justify-center rounded-lg text-xl transition-colors duration-300 border ${priority === p ? 'bg-[hsl(var(--accent))] text-white' : 'bg-gray-100 text-black hover:bg-gray-200'}`}
                         onClick={() => handlePriorityChange(p)}
                       >
                         {p}
@@ -442,9 +443,9 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                       step="1"
                       value={timeInput}
                       onChange={handleTimerChange}
-                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-blue-500 text-white"
+                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[hsl(var(--accent))] text-white"
                     />
-                    <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-[#074072] transition" onClick={isTimerRunning ? stopTimer : startTimer}>
+                    <button className="p-2 bg-[hsl(var(--accent))] text-white rounded-md hover:bg-[#443F76] transition" onClick={isTimerRunning ? stopTimer : startTimer}>
                       {isTimerRunning ? <PauseIcon /> : <PlayIcon />}
                     </button>
                   </div>
@@ -521,15 +522,15 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white">
                   <button
                     type="button"
-                    className="absolute top-2 right-2 bg-blue-500 text-gray-500"
+                    className="absolute top-2 right-2 text-gray-500"
                     onClick={() => setIsOpen(false)}
                   >
                     <XMarkIcon width={22} height={22} className="text-white"/>
                   </button>
-                  <div className="flex items-center space-x-2 justify-center">
+                  <div className="flex min-h-full items-center space-x-2 ml-5 mr-5 justify-start ">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-white mr-2 text-center"
+                      className="text-lg font-medium leading-6 text-white mr-1 text-center"
                     >
                     Select Deadline
                     </Dialog.Title>

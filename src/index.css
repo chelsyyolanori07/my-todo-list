@@ -272,7 +272,7 @@ body {
   display: grid;
   justify-items: center;
   font-family: "Comic Sans", cursive;
-  background-color: hsl(var(--bg));
+  background-color: #302e4a;
   color: hsl(var(--txt));
 }
 
@@ -383,11 +383,12 @@ hr {
 
 .input:focus~.label,
 .input:not(:placeholder-shown)~.label {
-  transform: translate3d(0, -3.7em, 0);
+  transform: translate3d(0, -4em, 0);
   background-color: hsl(var(--accent));
   color: #ffffff;
   border-radius: 0.5em;
-  padding: 0.3em;
+  padding: 0.5em;
+  justify-content: center;
 }
 
 .input::placeholder {

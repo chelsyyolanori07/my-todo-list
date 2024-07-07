@@ -144,7 +144,7 @@ const CustomForm = ({ addTask, setFilter }) => {
                 <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white">
                   <button
                     type="button"
-                    className="absolute top-2 right-2 bg-blue-500 text-gray-500"
+                    className="absolute top-2 right-2 text-gray-500"
                     onClick={() => setShowInfoDialog(false)}
                   >
                     <XMarkIcon width={22} height={22} className="text-white"/>
@@ -198,8 +198,8 @@ const CustomForm = ({ addTask, setFilter }) => {
                           <span>You can set up your task timer and click start button to start the timer.</span>
                         </li>
                         <li className="flex items-center space-x-2 mt-2 mb-2">
-                          <TagIcon className="h-10 w-10 text-white" />
-                          <span>You can create a custom tag using combobox feature; you will find (+) button there or you can edit your task by writing "#tagname" on the task name.</span>
+                          <TagIcon className="h-9 w-9 text-white" />
+                          <span>You can create a custom tag using combobox feature, you will find (+) button there or you can edit your task by writing "#tagname" on it.</span>
                         </li>
                       </ul>
                     </div>

@@ -16,7 +16,7 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       selected={selected}
       onSelect={onSelect}
-      className={cn("p-10 bg-[#b8b9c6] rounded-lg border-2 border-white shadow-lg", className)}
+      className={cn("p-10 bg-[#b8b9c6] rounded-lg border-4 border-white shadow-xl", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",

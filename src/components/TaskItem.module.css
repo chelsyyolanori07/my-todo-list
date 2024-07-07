@@ -14,6 +14,7 @@
   position: relative;
   box-sizing: border-box;
   transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  background-color: #363255;
 }
 
 .task-container {
@@ -208,10 +209,11 @@
   position: relative;
   display: flex;
   align-items: center;
-  background-color: #25547B;
+  background-color: hsl(var(--accent));
   border-radius: 4px;
   margin-right: 7px;
   margin-top: 3px;
+  display: inline-block;
 }
 
 .tag .close-button {
