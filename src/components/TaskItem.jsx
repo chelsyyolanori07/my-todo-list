@@ -43,7 +43,8 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     e.preventDefault();
     const tags = editedTaskName.match(/#[\w]+/g) || [];
     const newTags = tags.map(tag => tag.slice(1));
-    updateTask({ ...task, name: editedTaskName, tags: newTags });
+    const mergedTags = [...new Set([...(task.tags || []), ...newTags])];
+    updateTask({ ...task, name: editedTaskName, tags: mergedTags });
     setIsEditing(false);
   };
 
@@ -94,7 +95,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
   const handleAddTag = () => {
     const trimmedNewTag = newTag.trim();
     if (task.tags && !task.tags.includes(trimmedNewTag)) {
-      const updatedTags = [...task.tags, trimmedNewTag];
+      const updatedTags = [...new Set([...(task.tags || []), trimmedNewTag])];
       updateTask({ ...task, tags: updatedTags });
       addTag(trimmedNewTag);
       setNewTag("");
@@ -519,7 +520,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white">
+                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white min-h-[150px]">
                   <button
                     type="button"
                     className="absolute top-2 right-2 text-gray-500"
@@ -527,7 +528,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
                   >
                     <XMarkIcon width={22} height={22} className="text-white"/>
                   </button>
-                  <div className="flex min-h-full items-center space-x-2 ml-5 mr-5 justify-start ">
+                  <div className="flex min-h-[30px] items-center space-x-2 ml-5 mr-5 justify-start">
                     <Dialog.Title
                       as="h3"
                       className="text-lg font-medium leading-6 text-white mr-1 text-center"
