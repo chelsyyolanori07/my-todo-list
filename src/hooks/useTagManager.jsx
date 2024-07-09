@@ -1,23 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function useTagManager(initialTags = []) {
-  const [availableTags, setAvailableTags] = useState([]);
+  const [availableTags, setAvailableTags] = useState(() => {
+    const storedTags = JSON.parse(localStorage.getItem('tags')) || [];
+    return [...new Set([...initialTags, ...storedTags])];
+  });
 
   useEffect(() => {
     const storedTags = JSON.parse(localStorage.getItem('tags')) || [];
     const allTags = [...new Set([...initialTags, ...storedTags])];
-    setAvailableTags(prevTags => {
-      if (JSON.stringify(prevTags) !== JSON.stringify(allTags)) {
-        return allTags;
-      }
-      return prevTags;
-    });
+    
+    if (JSON.stringify(availableTags) !== JSON.stringify(allTags)) {
+      setAvailableTags(allTags);
+      localStorage.setItem('tags', JSON.stringify(allTags));
+    }
   }, [initialTags]);
 
   const addTag = (tag) => {
-    const updatedTags = [...availableTags, tag];
-    setAvailableTags(updatedTags);
-    localStorage.setItem('tags', JSON.stringify(updatedTags));
+    if (!availableTags.includes(tag)) {
+      const updatedTags = [...availableTags, tag];
+      setAvailableTags(updatedTags);
+      localStorage.setItem('tags', JSON.stringify(updatedTags));
+    }
   };
 
   const removeTagFromTask = (tagToRemove) => {

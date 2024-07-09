@@ -1,7 +1,7 @@
-import { FunnelIcon, PlusIcon, InformationCircleIcon, CheckCircleIcon, TrashIcon, PencilSquareIcon, XMarkIcon, CalendarIcon, FlagIcon, TagIcon } from '@heroicons/react/24/solid';
+import { Dialog, Transition } from '@headlessui/react';
+import { CalendarIcon, CheckCircleIcon, FlagIcon, FunnelIcon, InformationCircleIcon, PencilSquareIcon, PlusIcon, TagIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { ClockIcon, EllipsisVertical } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
 
 const CustomForm = ({ addTask, setFilter }) => {
   const [task, setTask] = useState("");
@@ -141,7 +141,7 @@ const CustomForm = ({ addTask, setFilter }) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white">
+                <Dialog.Panel className="w-full max-w-lg relative overflow-hidden rounded-2xl bg-[#302e4a] p-6 text-left align-middle shadow-xl transition-all border-4 border-white">
                   <button
                     type="button"
                     className="absolute top-2 right-2 text-gray-500"
@@ -162,7 +162,7 @@ const CustomForm = ({ addTask, setFilter }) => {
                       Here are the simple instructions on how to use the app:
                       <ul className="list-disc list-inside">
                         <li className="flex items-center space-x-2 mt-2 mb-2">
-                          <PlusIcon className="h-7 w-7 text-white" />
+                          <PlusIcon className="h-5 w-5 text-white" />
                           <span>Add your tasks using the input field and click the plus icon or click enter.</span>
                         </li>
                         <li className="flex items-center space-x-2 mt-2 mb-2">
@@ -174,7 +174,7 @@ const CustomForm = ({ addTask, setFilter }) => {
                           <span>Mark tasks as done by checking them off.</span>
                         </li>
                         <li className="flex items-center space-x-2 mt-2 mb-2">
-                          <PencilSquareIcon className="h-6 w-6 text-white" />
+                          <PencilSquareIcon className="h-5 w-5 text-white" />
                           <span>Edit tasks by double-clicking on the task and save it by click enter.</span>
                         </li>
                         <li className="flex items-center space-x-2 mt-2 mb-2">
@@ -200,6 +200,14 @@ const CustomForm = ({ addTask, setFilter }) => {
                         <li className="flex items-center space-x-2 mt-2 mb-2">
                           <TagIcon className="h-10 w-10 text-white" />
                           <span>You can create a custom tag using combobox feature, you will find (+) button there or you can edit your task by writing "#tagname" on the task name.</span>
+                        </li>
+                        <li className="flex items-center space-x-2 mt-2 mb-2">
+                          <XMarkIcon className="h-7 w-7 text-white" />
+                          <span>If you hover on tag in the task UI you will see 'X' button there, it used to delete the tag from that specific task.</span>
+                        </li>
+                        <li className="flex items-center space-x-2 mt-2 mb-2">
+                          <XMarkIcon className="h-12 w-12 text-white" />
+                          <span>To delete a custom tag permanently, find the task where you created the tag. Search for the tag name in the combobox, then click the 'X' button next to it to delete the tag permanently.</span>
                         </li>
                       </ul>
                     </div>
