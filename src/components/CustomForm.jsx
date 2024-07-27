@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { CalendarIcon, CheckCircleIcon, FlagIcon, FunnelIcon, InformationCircleIcon, PencilSquareIcon, PlusIcon, TagIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { ClockIcon, EllipsisVertical } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from 'react';
-import * as chrono from 'chrono-node'; //import chrono-node
+import * as chrono from 'chrono-node';
 
 const CustomForm = ({ addTask, setFilter, setDeadline }) => {
   const [task, setTask] = useState("");
@@ -14,17 +14,22 @@ const CustomForm = ({ addTask, setFilter, setDeadline }) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const parsedDate = chrono.parseDate(task); // Parse the date using Chrono-node
+    const tagPattern = /#[\w]+/g;
+    const tags = task.match(tagPattern) || [];
+    const newTags = tags.map(tag => tag.slice(1));
+
+    const parsedDate = chrono.parseDate(task);
     const newTask = {
       name: task,
       checked: false,
       id: Date.now(),
       priority: null,
-      deadline: parsedDate ? parsedDate.toISOString() : null // Set the deadline if parsedDate is valid
+      deadline: parsedDate ? parsedDate.toISOString() : null,
+      tags: newTags
     };
     addTask(newTask);
     if (parsedDate) {
-      setDeadline(newTask.id, parsedDate); // Set the deadline in the calendar
+      setDeadline(newTask.id, parsedDate);
     }
     setTask("");
   };
