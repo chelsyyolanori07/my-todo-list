@@ -91,7 +91,7 @@ function App() {
       <header>
         <h1 className="text-5xl font-bold mb-3">My Todo List :)</h1>
       </header>
-      <CustomForm addTask={addTask} setFilter={setFilter} />
+      <CustomForm addTask={addTask} setFilter={setFilter} setDeadline={setDeadline} />
       {filteredTasks && (
         <TaskList
           tasks={filteredTasks}
