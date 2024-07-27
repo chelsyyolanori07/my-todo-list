@@ -8,6 +8,7 @@ import Select, { components } from 'react-select';
 import styles from './TaskItem.module.css';
 import TimerBar from './TimerBar';
 import { CalendarDemo } from "./demo/CalendarDemo";
+import * as chrono from 'chrono-node';
 
 const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => {
   const [isChecked, setIsChecked] = useState(task.checked);
@@ -44,7 +45,14 @@ const TaskItem = ({ task, deleteTask, toggleTask, updateTask, setDeadline }) => 
     const tags = editedTaskName.match(/#[\w]+/g) || [];
     const newTags = tags.map(tag => tag.slice(1));
     const mergedTags = [...new Set([...(task.tags || []), ...newTags])];
-    updateTask({ ...task, name: editedTaskName, tags: mergedTags });
+    const parsedDate = chrono.parseDate(editedTaskName);
+    const updatedTask = {
+      ...task,
+      name: editedTaskName,
+      tags: mergedTags,
+      deadline: parsedDate ? parsedDate.toISOString() : task.deadline,
+    };
+    updateTask(updatedTask);
     setIsEditing(false);
   };
 
