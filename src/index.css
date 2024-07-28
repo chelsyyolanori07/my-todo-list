@@ -100,11 +100,11 @@ input, label {
   --_ttype_squish: cubic-bezier(0.86, -0.1, 0.27, 1.15);
 
   /* Light Mode */
-  --bg--light: var(--_hue) 30% 94%;
-  --txt--light: var(--_hue) 40% 5%;
-  --accent--light: var(--_hue) 55% 50%;
-  --accent1--light: 10 80% 60%;
-  --muted--light: var(--_hue) 30% 99%;
+  --bg--light: var(--_hue) 10% 100%;
+  --txt--light: var(--_hue) 30% 75%;
+  --accent--light: var(--_hue) 25% 60%;
+  --accent1--light: 10 70 100%;
+  --muted--light: var(--_hue) 15% 90%;
 
   /* Dark Mode */
   --bg--dark: var(--_hue) 35% 28%;
