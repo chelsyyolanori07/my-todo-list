@@ -1,5 +1,5 @@
 This todo list project is done, and honestly this project is my way to learn react js🧾 <br>
-Thanks to ed sensei again who teach and help me to finish this project, hope God will give his kindness back billionfold :) <br>
+Thanks to ed sensei (https://github.com/Coloby) again who teach and help me to finish this project, i really hope God will give his kindness back billionfold and more :) <br>
 
 In my silly todo list you can use some of the features that available which are:<br>
 1. Add your todo list and stuff following CRUD (Create, Read, Update, and Delete) <br>
